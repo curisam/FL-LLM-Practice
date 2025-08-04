@@ -1,0 +1,7 @@
+# ignore data & checkpoints
+data/
+exp/
+checkpoints/
+trash/
+federatedscope/trash/
+final_data_splits/
