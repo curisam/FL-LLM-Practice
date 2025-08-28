@@ -7,8 +7,8 @@ federate:
   client_num: 53
   sample_client_num: 5
   total_round_num: 300
-  save_to: "checkpoints_0.1/tldr_choice_qwen_fedbiscuit_u5.ckpt"
-  ignore_weight: False
+  save_to: "checkpoints_1.0/tldr_choice_qwen_fedbiscuit_u7.ckpt"
+  ignore_weight: True
   save_freq: 25
   share_local_model: True
   online_aggr: False
@@ -25,7 +25,7 @@ llm:
     max_len: 1024
   adapter:
     use: True
-    count: 5
+    count: 7
     warmup:
       use: True
       round: 25
@@ -33,8 +33,6 @@ llm:
       use: True
       round: 25
     args: [ { 'adapter_package': 'peft', 'adapter_method': 'lora', 'r': 8, 'lora_alpha': 16, 'lora_dropout': 0.05, target_modules: [ "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj" ] } ]
-
-
   # reward_coeff: 0.1
   grad_accum_step: 2
 dataloader:
@@ -52,7 +50,7 @@ train:
     lr: 0.00001
   scheduler:
     milestones: [200, 250]    # 100라운드, 150라운드에 감축
-    gamma: 0.1            # ×0.1씩 곱해 감축
+    gamma: 1.0            # ×1.0씩 곱해 감축
   is_enable_half: True
 criterion:
   type: CrossEntropyLoss
@@ -65,5 +63,5 @@ eval:
   metrics: ['loss', 'acc']
   best_res_update_round_wise_key: test_loss
   count_flops: False
-outdir: exp/tldr/choice_qwen/fedbiscuit_u5_0.1
+outdir: exp/tldr/choice_qwen/fedbiscuit_u7_1.0
 expname: ""
