@@ -1,0 +1,6 @@
+python: 3.9.23
+torch: 2.1.2+cu121 cuda: 12.1
+accelerate: 1.7.0
+transformers: 4.40.2
+peft: 0.6.2
+bitsandbytes: <none>

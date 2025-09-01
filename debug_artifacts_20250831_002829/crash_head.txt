@@ -1,0 +1,60 @@
+[2025-08-31 00:28:43,319] torch.distributed.run: [WARNING] 
+[2025-08-31 00:28:43,319] torch.distributed.run: [WARNING] *****************************************
+[2025-08-31 00:28:43,319] torch.distributed.run: [WARNING] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+[2025-08-31 00:28:43,319] torch.distributed.run: [WARNING] *****************************************
+2025-08-31 00:28:45 (root:430) INFO: [logger] non-main process: file handler not attached (rank=2/4)
+2025-08-31 00:28:45 (root:47) INFO: [main] outdir=exp/tldr/choice_qwen/fedbiscuit_u3_1.0
+2025-08-31 00:28:45 (root:426) INFO: [logger] file handler -> exp/tldr/choice_qwen/fedbiscuit_u3_1.0/exp_print.log
+2025-08-31 00:28:45 (root:47) INFO: [main] outdir=exp/tldr/choice_qwen/fedbiscuit_u3_1.0
+2025-08-31 00:28:45 (root:430) INFO: [logger] non-main process: file handler not attached (rank=1/4)
+2025-08-31 00:28:45 (root:47) INFO: [main] outdir=exp/tldr/choice_qwen/fedbiscuit_u3_1.0
+2025-08-31 00:28:45 (root:430) INFO: [logger] non-main process: file handler not attached (rank=3/4)
+2025-08-31 00:28:45 (root:47) INFO: [main] outdir=exp/tldr/choice_qwen/fedbiscuit_u3_1.0
+/home/seongyoon/anaconda3/envs/fs-llm/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+/home/seongyoon/anaconda3/envs/fs-llm/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+/home/seongyoon/anaconda3/envs/fs-llm/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+/home/seongyoon/anaconda3/envs/fs-llm/lib/python3.9/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+2025-08-31 00:28:50 (federatedscope.llm.dataloader.reddit_tldr:437) INFO: Process 3: Waiting for completion file...
+2025-08-31 00:28:50 (federatedscope.llm.dataloader.reddit_tldr:440) INFO: Process 3: Completion file found.
+2025-08-31 00:28:51 (federatedscope.llm.dataloader.reddit_tldr:437) INFO: Process 1: Waiting for completion file...
+2025-08-31 00:28:51 (federatedscope.llm.dataloader.reddit_tldr:440) INFO: Process 1: Completion file found.
+2025-08-31 00:28:51 (federatedscope.llm.dataloader.reddit_tldr:437) INFO: Process 2: Waiting for completion file...
+2025-08-31 00:28:51 (federatedscope.llm.dataloader.reddit_tldr:440) INFO: Process 2: Completion file found.
+2025-08-31 00:29:13 (federatedscope.core.data.base_translator:290) INFO: Main process: Completion file found. Skipping generation.
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:295) INFO: Process 2: Waiting for final_datadict completion file...
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:298) INFO: Process 2: Completion file found.
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:295) INFO: Process 1: Waiting for final_datadict completion file...
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:298) INFO: Process 1: Completion file found.
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:295) INFO: Process 3: Waiting for final_datadict completion file...
+2025-08-31 00:29:14 (federatedscope.core.data.base_translator:298) INFO: Process 3: Completion file found.
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:324) INFO: [Final Split Summary][loaded][server=0][rank=0/4] Train=92858, Val=33082, Test=50715, Total=176655
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=1][rank=0/4] Train=2793, Val=146, Test=40, Total=2979
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=2][rank=0/4] Train=214, Val=11, Test=40, Total=265
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=3][rank=0/4] Train=691, Val=36, Test=40, Total=767
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=4][rank=0/4] Train=213, Val=11, Test=40, Total=264
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=5][rank=0/4] Train=285, Val=14, Test=40, Total=339
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=6][rank=0/4] Train=2547, Val=134, Test=40, Total=2721
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=7][rank=0/4] Train=1088, Val=57, Test=40, Total=1185
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=8][rank=0/4] Train=1316, Val=69, Test=40, Total=1425
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=9][rank=0/4] Train=3572, Val=188, Test=40, Total=3800
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=10][rank=0/4] Train=1209, Val=63, Test=40, Total=1312
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=11][rank=0/4] Train=621, Val=32, Test=40, Total=693
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=12][rank=0/4] Train=2605, Val=137, Test=40, Total=2782
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=13][rank=0/4] Train=1372, Val=72, Test=40, Total=1484
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=14][rank=0/4] Train=3055, Val=160, Test=40, Total=3255
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=15][rank=0/4] Train=14550, Val=200, Test=40, Total=14790
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=16][rank=0/4] Train=2589, Val=136, Test=40, Total=2765
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=17][rank=0/4] Train=5883, Val=200, Test=40, Total=6123
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=18][rank=0/4] Train=2576, Val=135, Test=40, Total=2751
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=19][rank=0/4] Train=2102, Val=110, Test=40, Total=2252
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=20][rank=0/4] Train=2399, Val=126, Test=40, Total=2565
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=21][rank=0/4] Train=2915, Val=153, Test=40, Total=3108
+2025-08-31 00:29:54 (federatedscope.core.data.base_translator:333) INFO: [Final Split Summary][loaded][client=22][rank=0/4] Train=224, Val=11, Test=40, Total=275
