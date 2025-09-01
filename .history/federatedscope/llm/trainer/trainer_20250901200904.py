@@ -425,28 +425,18 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
                 # (5) 모델/옵티마이저만 prepare (로더는 절대 넘기지 않음)
                 ctx.model, ctx.optimizer = self.accelerator.prepare(unwrapped_model, ctx.optimizer)
-
-                try:
-                    tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-                    mdl = getattr(ctx, "model", None)
-                    if tok is not None and mdl is not None:
-                        log_tok_model_sync(tok, mdl, tag=f"after-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
-                except Exception:
-                    pass
-
-
-
             else:
                 # 평가 모드: 모델만 prepare
                 ctx.model = self.accelerator.prepare(unwrapped_model)
 
-                try:
-                    tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-                    mdl = getattr(ctx, "model", None)
-                    if tok is not None and mdl is not None:
-                        log_tok_model_sync(tok, mdl, tag=f"after-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
-                except Exception:
-                    pass
+            # >>> [추가] 재생성 '직후' 스냅샷 (훈련 분기)
+            try:
+                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+                mdl = getattr(ctx, "model", None)
+                if tok is not None and mdl is not None:
+                    log_tok_model_sync(tok, mdl, tag=f"after-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
+            except Exception:
+                pass
 
 
 
@@ -529,18 +519,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
 
         """
-
-        if not hasattr(self, "_logged_first_fwd_round") or self._logged_first_fwd_round != getattr(self.ctx, "current_round_num", None):
-            try:
-                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-                mdl = getattr(self.ctx, "model", None)
-                if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, mdl, tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
-            except Exception:
-                pass
-            self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
-
-
 
 
 
@@ -720,7 +698,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         if getattr(ctx, 'rank', 0) == 0:
             logger.info(f"[Memory Cleanup] Deleted ctx attrs: {deleted_attrs}")        
 
-        # 삭제 직전
+        # >>> [선택] 삭제 '직전'
         try:
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
@@ -730,23 +708,25 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             pass
 
 
+
         # C) Accelerate 내부 캐시/그래프 정리 → Accelerator 삭제
         if hasattr(self, 'accelerator') and self.accelerator is not None:
             try:
+                # accelerate>=0.29
                 self.accelerator.free_memory()
             except Exception:
                 pass
             del self.accelerator
             logger.info("Accelerator object has been deleted.")
 
-            # 삭제 직후  ← 태그 주의: after-accel-delete
-            try:
-                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-                mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
-                if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, mdl, tag="after-accel-delete")
-            except Exception:
-                pass
+        # >>> [선택] 삭제 '직전'
+        try:
+            tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+            mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
+            if tok is not None and mdl is not None:
+                log_tok_model_sync(tok, mdl, tag="before-accel-delete")
+        except Exception:
+            pass
 
 
 

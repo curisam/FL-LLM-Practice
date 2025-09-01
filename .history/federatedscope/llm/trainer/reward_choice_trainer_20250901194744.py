@@ -233,13 +233,6 @@ class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 v
                 f"total={len(base_loader.dataset)})"
             )
 
-            try:
-                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-                mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
-                if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, mdl, tag=f"after-reset-{split_name}")
-            except Exception:
-                pass
 
 
     @use_diff

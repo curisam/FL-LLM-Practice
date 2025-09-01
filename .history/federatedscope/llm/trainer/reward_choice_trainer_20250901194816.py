@@ -224,15 +224,16 @@ class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 v
             client_data_obj[loader_key] = loader
             setattr(self.ctx, ctx_loader_key, loader)
 
-            logger.info(
-                f"Dataloader for '{split_name}' has been reset and recreated. "
-                f"(sharded={sharded}, "
-                f"world_size={1 if not sharded else world_size}, "
-                f"rank={0 if not sharded else rank}, "
-                f"local_count={local_count}, "
-                f"total={len(base_loader.dataset)})"
-            )
+            # logger.info(
+            #     f"Dataloader for '{split_name}' has been reset and recreated. "
+            #     f"(sharded={sharded}, "
+            #     f"world_size={1 if not sharded else world_size}, "
+            #     f"rank={0 if not sharded else rank}, "
+            #     f"local_count={local_count}, "
+            #     f"total={len(base_loader.dataset)})"
+            # )
 
+            # 추가 (각 split마다 한 번씩 찍힘)
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)

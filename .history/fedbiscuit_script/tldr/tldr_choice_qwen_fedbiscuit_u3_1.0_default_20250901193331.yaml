@@ -9,7 +9,7 @@ federate:
   total_round_num: 250
   save_to: "checkpoints_1.0_default/tldr_choice_qwen_fedbiscuit_u3.ckpt"
   ignore_weight: True
-  save_freq: 2
+  save_freq: 25
   share_local_model: True
   online_aggr: False
 data:
@@ -58,7 +58,7 @@ trainer:
   type: llmrewardchoicetrainer
   choices: ['A', 'B']
 eval:
-  freq: 2
+  freq: 25
   split: ['val', 'test']
   metrics: ['loss', 'acc']
   best_res_update_round_wise_key: test_loss

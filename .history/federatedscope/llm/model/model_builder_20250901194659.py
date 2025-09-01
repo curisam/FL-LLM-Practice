@@ -8,8 +8,6 @@ import logging
 
 from federatedscope.llm.misc.accel_utils import should_use_device_map_auto
 
-from federatedscope.llm.misc.debug_utils import log_tok_model_sync
-
 logger = logging.getLogger(__name__)
 
 
