@@ -53,8 +53,6 @@ from federatedscope.llm.utils_dist import barrier_all
 
 
 
-
-
 class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습할 수 있도록 확장된 버전.
 
 #즉, 일반적인 Trainer로는 너무 느리거나 메모리를 너무 많이 잡아먹는 LLM을 학습하려면,다음 두 가지가 필요함.
@@ -125,22 +123,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         else:
             self.accelerator = None
             self.device = device
-
-    def _unwrap(self, m):
-        """Accelerate/DDP 래핑된 모델에서 원본 HF 모델을 안전하게 얻는다."""
-        if m is None:
-            return None
-        # Accelerate 인스턴스 메서드 우선
-        try:
-            if getattr(self, "accelerator", None) is not None:
-                return self.accelerator.unwrap_model(m)
-        except Exception:
-            pass
-        # DDP 래퍼면 .module 체인으로 벗기기
-        while hasattr(m, "module"):
-            m = m.module
-        return m
-
 
 
 
@@ -385,25 +367,121 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
         # --- [핵심 추가 1] 매 라운드 accelerator 새로 생성 ---
         if ctx.cfg.llm.accelerator.use:
-            # ✅ Accelerator는 이미 __init__에서 1회 생성됨
+            # (0) 라운드 번호를 가장 먼저 확정 (Round #-1 방지)
+            if not hasattr(ctx, 'current_round_num') and hasattr(self, 'cur_round_i'):
+                ctx.current_round_num = self.cur_round_i
+
+            # (1) 재생성 전 배리어
+            barrier_all()
+
+
+            # 재생성 직전 스냅샷
+            try:
+                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+                mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
+                if tok is not None and mdl is not None:
+                    log_tok_model_sync(tok, mdl, tag=f"before-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
+            except Exception:
+                pass
+
+
+
+            # (2) DDP 안전옵션
+            ddp_kwargs = DistributedDataParallelKwargs(
+                find_unused_parameters=True,      # 어댑터 스왑 등 unused 파라미터 대비
+                gradient_as_bucket_view=False,    # bf16 버킷뷰 이슈 회피
+                broadcast_buffers=False
+            )
+
+            logger.info("Re-creating Accelerator for the new round.")
+            self.accelerator = Accelerator(
+                gradient_accumulation_steps=self.grad_accum_step,
+                mixed_precision='bf16',
+                kwargs_handlers=[ddp_kwargs],
+            )#여기에 gradient_accumulation_steps=self.grad_accum_step 반영되는 것 유의
             ctx.device = self.accelerator.device
 
-            unwrapped_model = self.model
-            while hasattr(unwrapped_model, 'module'):
-                unwrapped_model = unwrapped_model.module
 
+            """
+            Accelerate/DDP 래핑은 “포장만” 바뀌고, 알맹이(원본 파라미터 텐서)는 그대로 공유한다.
+
+            그래서 한쪽에서 학습으로 값이 바뀌면, 그 알맹이를 가리키는 모든 라벨에서 동시에 반영된다.
+            
+            이러한 이유 client 클래스 기준 self.model과 self.trainer.ctx.model 의 파라미터 텐서는 다른 한 변수가 업데이트 되어도 항상 같게 유지됨.
+
+            ✅ 결론
+
+                가변 객체(list, tensor): in-place 연산은 참조 모두에 반영, 새 객체 할당은 연결이 끊김
+                불가변 객체(int, str 등): 항상 새 객체를 만들어 할당하므로, 참조 공유로 값이 동기화되지 않음
+
+                PyTorch Optimizer가 in-place 연산을 쓰는 이유는 모든 참조(self.model, ctx.model, wrapper.module)에서 파라미터 일관성을 유지하기 위해서임.
+
+            
+            """
+
+            # (3) 언랩된 원본 모델 추출
+            unwrapped_model = self.model
+            while hasattr(unwrapped_model, 'module'): #이전 라운드에서 ctx.model이 Accelerator/DDP 래퍼라면 ctx.model.module로 해야 self.model과 같이 nn.Module 객체가 됨.
+                unwrapped_model = unwrapped_model.module #optimizer를 생성할 떄 항상 원본 파라미터 집합을 넘겨야 함.
+            if hasattr(unwrapped_model, 'sharding'):
+                unwrapped_model.sharding()
+
+            # (4) 옵티마이저는 반드시 "언랩된 원본 파라미터"로 생성
             if ctx.cur_mode in [MODE.TRAIN, MODE.FINETUNE]:
-                if ctx.optimizer is None:
-                    ctx.optimizer = get_optimizer(unwrapped_model, **ctx.cfg[ctx.cur_mode].optimizer)
-                if ctx.scheduler is None:
-                    ctx.scheduler = None
+                cfg_optimizer = ctx.cfg[ctx.cur_mode].optimizer
+                if cfg_optimizer.type == 'AdamW':
+                    adamw_kwargs = {'lr': cfg_optimizer.lr, 'betas': cfg_optimizer.betas}
+                    ctx.optimizer = AdamW(unwrapped_model.parameters(), **adamw_kwargs)
+                else:
+                    ctx.optimizer = get_optimizer(unwrapped_model, **cfg_optimizer)
+
+                ctx.scheduler = None
+
+                current_lr = ctx.optimizer.param_groups[0]['lr']
+                
+                round_num = getattr(ctx, 'current_round_num', 'N/A')
+                logger.info(f"Round #{round_num} - Initializing with LR: {current_lr}")
+
+                # (5) 모델/옵티마이저만 prepare (로더는 절대 넘기지 않음)
                 ctx.model, ctx.optimizer = self.accelerator.prepare(unwrapped_model, ctx.optimizer)
+
+                try:
+                    tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+                    mdl = getattr(ctx, "model", None)
+                    if tok is not None and mdl is not None:
+                        log_tok_model_sync(tok, mdl, tag=f"after-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
+                except Exception:
+                    pass
+
+
+
             else:
+                # 평가 모드: 모델만 prepare
                 ctx.model = self.accelerator.prepare(unwrapped_model)
+
+                try:
+                    tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+                    mdl = getattr(ctx, "model", None)
+                    if tok is not None and mdl is not None:
+                        log_tok_model_sync(tok, mdl, tag=f"after-accel-recreate@round{getattr(ctx,'current_round_num','?')}")
+                except Exception:
+                    pass
+
+
+
+
+
+            # (6) 재래핑 완료 동기화
+            barrier_all()
+
+
         else:
+            # prepare model and optimizer
             ctx.model.to(ctx.device)
             if ctx.cur_mode in [MODE.TRAIN, MODE.FINETUNE]:
                 ctx.optimizer = get_optimizer(ctx.model, **ctx.cfg[ctx.cur_mode].optimizer)
+                
+
                 ctx.scheduler = None
 
                 # [디버깅 로그] 현재 LR 출력
@@ -426,53 +504,9 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         else:  # MODE.TEST or MODE.VAL
             ctx.model.eval()
 
-        # ✅ 토크나이저 길이와 vocab 일부 로깅 + 추가 토큰 확인
-        try:
-            tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-            mdl = self._unwrap(getattr(ctx, "model", None))
-
-            if tok is not None and mdl is not None:
-                tok_len = len(tok)
-                emb_len = mdl.get_input_embeddings().weight.shape[0]
-
-                # 현재 라운드 번호
-                rnd = getattr(ctx, "current_round_num", "?")
-
-                # vocab dict
-                vocab_dict = tok.get_vocab()
-                vocab_size = len(vocab_dict)
-
-                # Hugging Face tokenizer는 special_tokens_map 속성에 현재 등록된 special tokens 보유
-                special_tokens = getattr(tok, "special_tokens_map", {})
-
-                logger.info(
-                    f"[ROUND{rnd}] tokenizer_len={tok_len} "
-                    f"(vocab size={vocab_size}) | emb_rows={emb_len} | "
-                    f"special_tokens={special_tokens}"
-                )
-
-                # vocab 앞뒤 일부만 출력
-                vocab_items = list(vocab_dict.keys())
-                logger.debug(f"[ROUND{rnd}] vocab_head={vocab_items[:5]} vocab_tail={vocab_items[-5:]}")
-
-                # mismatch 체크
-                if tok_len != emb_len:
-                    logger.warning(f"[ROUND{rnd}] ⚠️ tokenizer/embedding mismatch!")
-
-                # 추가된 토큰 개수와 어떤 토큰인지 확인
-                added_count = tok_len - vocab_size
-                if added_count > 0:
-                    added_list = []
-                    for k, v in special_tokens.items():
-                        if v not in vocab_dict:
-                            continue
-                        added_list.append((k, v))
-                    logger.info(f"[ROUND{rnd}] added_special={added_count}, tokens={added_list}")
-
-        except Exception as e:
-            logger.warning(f"[Tokenizer log skipped] {e}")
-
-
+            
+    def _hook_on_epoch_start(self, ctx):
+        pass
 
  
     #local process에서만 일어나는 일. 각 rank가 자기 shard된 미니배치를 forward 하고 loss를 계산하는 것.
@@ -520,7 +554,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+                    log_tok_model_sync(tok, mdl, tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
             except Exception:
                 pass
             self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
@@ -710,25 +744,26 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
+                log_tok_model_sync(tok, mdl, tag="before-accel-delete")
         except Exception:
             pass
 
-        # ✅ Accelerator는 삭제하지 않음, free_memory만 호출
-        if self.accelerator is not None:
+
+        # C) Accelerate 내부 캐시/그래프 정리 → Accelerator 삭제
+        if hasattr(self, 'accelerator') and self.accelerator is not None:
             try:
                 self.accelerator.free_memory()
             except Exception:
                 pass
-
-            logger.info("Accelerator memory has been freed (object preserved).")
+            del self.accelerator
+            logger.info("Accelerator object has been deleted.")
 
             # 삭제 직후  ← 태그 주의: after-accel-delete
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
+                    log_tok_model_sync(tok, mdl, tag="after-accel-delete")
             except Exception:
                 pass
 

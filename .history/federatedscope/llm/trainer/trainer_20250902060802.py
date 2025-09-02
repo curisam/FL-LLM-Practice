@@ -53,8 +53,6 @@ from federatedscope.llm.utils_dist import barrier_all
 
 
 
-
-
 class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습할 수 있도록 확장된 버전.
 
 #즉, 일반적인 Trainer로는 너무 느리거나 메모리를 너무 많이 잡아먹는 LLM을 학습하려면,다음 두 가지가 필요함.
@@ -125,22 +123,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         else:
             self.accelerator = None
             self.device = device
-
-    def _unwrap(self, m):
-        """Accelerate/DDP 래핑된 모델에서 원본 HF 모델을 안전하게 얻는다."""
-        if m is None:
-            return None
-        # Accelerate 인스턴스 메서드 우선
-        try:
-            if getattr(self, "accelerator", None) is not None:
-                return self.accelerator.unwrap_model(m)
-        except Exception:
-            pass
-        # DDP 래퍼면 .module 체인으로 벗기기
-        while hasattr(m, "module"):
-            m = m.module
-        return m
-
 
 
 
@@ -429,8 +411,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         # ✅ 토크나이저 길이와 vocab 일부 로깅 + 추가 토큰 확인
         try:
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-            mdl = self._unwrap(getattr(ctx, "model", None))
-
+            mdl = getattr(ctx, "model", None)
             if tok is not None and mdl is not None:
                 tok_len = len(tok)
                 emb_len = mdl.get_input_embeddings().weight.shape[0]
@@ -447,7 +428,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
                 logger.info(
                     f"[ROUND{rnd}] tokenizer_len={tok_len} "
-                    f"(vocab size={vocab_size}) | emb_rows={emb_len} | "
+                    f"(vocab size) | emb_rows={emb_len} | "
                     f"special_tokens={special_tokens}"
                 )
 
@@ -462,16 +443,17 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 # 추가된 토큰 개수와 어떤 토큰인지 확인
                 added_count = tok_len - vocab_size
                 if added_count > 0:
+                    # 실제 추가된 토큰: special_tokens_map.values() 안에 있음
                     added_list = []
                     for k, v in special_tokens.items():
                         if v not in vocab_dict:
+                            # 일부 경우에는 mapping만 존재하고 vocab에 없는 경우도 있어 방어코드
                             continue
                         added_list.append((k, v))
                     logger.info(f"[ROUND{rnd}] added_special={added_count}, tokens={added_list}")
 
         except Exception as e:
             logger.warning(f"[Tokenizer log skipped] {e}")
-
 
 
  
@@ -520,7 +502,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+                    log_tok_model_sync(tok, mdl, tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
             except Exception:
                 pass
             self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
@@ -710,7 +692,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
+                log_tok_model_sync(tok, mdl, tag="before-accel-delete")
         except Exception:
             pass
 
@@ -721,14 +703,14 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             except Exception:
                 pass
 
-            logger.info("Accelerator memory has been freed (object preserved).")
+            logger.info("Accelerator object has been deleted.")
 
             # 삭제 직후  ← 태그 주의: after-accel-delete
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
+                    log_tok_model_sync(tok, mdl, tag="after-accel-delete")
             except Exception:
                 pass
 

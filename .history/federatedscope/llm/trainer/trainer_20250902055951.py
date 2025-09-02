@@ -53,8 +53,6 @@ from federatedscope.llm.utils_dist import barrier_all
 
 
 
-
-
 class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습할 수 있도록 확장된 버전.
 
 #즉, 일반적인 Trainer로는 너무 느리거나 메모리를 너무 많이 잡아먹는 LLM을 학습하려면,다음 두 가지가 필요함.
@@ -125,22 +123,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         else:
             self.accelerator = None
             self.device = device
-
-    def _unwrap(self, m):
-        """Accelerate/DDP 래핑된 모델에서 원본 HF 모델을 안전하게 얻는다."""
-        if m is None:
-            return None
-        # Accelerate 인스턴스 메서드 우선
-        try:
-            if getattr(self, "accelerator", None) is not None:
-                return self.accelerator.unwrap_model(m)
-        except Exception:
-            pass
-        # DDP 래퍼면 .module 체인으로 벗기기
-        while hasattr(m, "module"):
-            m = m.module
-        return m
-
 
 
 
@@ -425,54 +407,24 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             ctx.model.train()
         else:  # MODE.TEST or MODE.VAL
             ctx.model.eval()
-
-        # ✅ 토크나이저 길이와 vocab 일부 로깅 + 추가 토큰 확인
+        # ✅ 토크나이저 길이와 vocab 일부 로깅
         try:
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-            mdl = self._unwrap(getattr(ctx, "model", None))
-
+            mdl = getattr(ctx, "model", None)
             if tok is not None and mdl is not None:
                 tok_len = len(tok)
                 emb_len = mdl.get_input_embeddings().weight.shape[0]
-
-                # 현재 라운드 번호
-                rnd = getattr(ctx, "current_round_num", "?")
-
-                # vocab dict
-                vocab_dict = tok.get_vocab()
-                vocab_size = len(vocab_dict)
-
-                # Hugging Face tokenizer는 special_tokens_map 속성에 현재 등록된 special tokens 보유
-                special_tokens = getattr(tok, "special_tokens_map", {})
-
-                logger.info(
-                    f"[ROUND{rnd}] tokenizer_len={tok_len} "
-                    f"(vocab size={vocab_size}) | emb_rows={emb_len} | "
-                    f"special_tokens={special_tokens}"
-                )
-
-                # vocab 앞뒤 일부만 출력
-                vocab_items = list(vocab_dict.keys())
-                logger.debug(f"[ROUND{rnd}] vocab_head={vocab_items[:5]} vocab_tail={vocab_items[-5:]}")
-
-                # mismatch 체크
+                logger.info(f"[ROUND{getattr(ctx,'current_round_num','?')}] tokenizer_len={tok_len} | emb_rows={emb_len}")
+                # vocab 앞뒤 5개만 디버그 출력
+                vocab_items = list(tok.get_vocab().keys())
+                logger.debug(f"[ROUND{getattr(ctx,'current_round_num','?')}] vocab_head={vocab_items[:5]} vocab_tail={vocab_items[-5:]}")
                 if tok_len != emb_len:
-                    logger.warning(f"[ROUND{rnd}] ⚠️ tokenizer/embedding mismatch!")
-
-                # 추가된 토큰 개수와 어떤 토큰인지 확인
-                added_count = tok_len - vocab_size
-                if added_count > 0:
-                    added_list = []
-                    for k, v in special_tokens.items():
-                        if v not in vocab_dict:
-                            continue
-                        added_list.append((k, v))
-                    logger.info(f"[ROUND{rnd}] added_special={added_count}, tokens={added_list}")
-
+                    logger.warning(f"[ROUND{getattr(ctx,'current_round_num','?')}] ⚠️ tokenizer/embedding mismatch!")
         except Exception as e:
             logger.warning(f"[Tokenizer log skipped] {e}")
-
-
+                    
+            def _hook_on_epoch_start(self, ctx):
+                pass
 
  
     #local process에서만 일어나는 일. 각 rank가 자기 shard된 미니배치를 forward 하고 loss를 계산하는 것.
@@ -520,7 +472,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+                    log_tok_model_sync(tok, mdl, tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
             except Exception:
                 pass
             self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
@@ -710,7 +662,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
+                log_tok_model_sync(tok, mdl, tag="before-accel-delete")
         except Exception:
             pass
 
@@ -721,14 +673,14 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             except Exception:
                 pass
 
-            logger.info("Accelerator memory has been freed (object preserved).")
+            logger.info("Accelerator object has been deleted.")
 
             # 삭제 직후  ← 태그 주의: after-accel-delete
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
+                    log_tok_model_sync(tok, mdl, tag="after-accel-delete")
             except Exception:
                 pass
 

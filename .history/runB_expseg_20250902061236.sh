@@ -1,7 +1,7 @@
 #!/bin/bash
-PORT=29501  # 충돌 시 다른 값으로 바꿔주세요
+PORT=29500  # 충돌 시 다른 값으로 바꿔주세요
 
-PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+env -u PYTORCH_CUDA_ALLOC_CONF \
 CUDA_VISIBLE_DEVICES=4,5,6,7 \
 CUDA_LAUNCH_BLOCKING=1 \
 TORCH_SHOW_CPP_STACKTRACES=1 \

@@ -53,8 +53,6 @@ from federatedscope.llm.utils_dist import barrier_all
 
 
 
-
-
 class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습할 수 있도록 확장된 버전.
 
 #즉, 일반적인 Trainer로는 너무 느리거나 메모리를 너무 많이 잡아먹는 LLM을 학습하려면,다음 두 가지가 필요함.
@@ -125,22 +123,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         else:
             self.accelerator = None
             self.device = device
-
-    def _unwrap(self, m):
-        """Accelerate/DDP 래핑된 모델에서 원본 HF 모델을 안전하게 얻는다."""
-        if m is None:
-            return None
-        # Accelerate 인스턴스 메서드 우선
-        try:
-            if getattr(self, "accelerator", None) is not None:
-                return self.accelerator.unwrap_model(m)
-        except Exception:
-            pass
-        # DDP 래퍼면 .module 체인으로 벗기기
-        while hasattr(m, "module"):
-            m = m.module
-        return m
-
 
 
 
@@ -428,8 +410,14 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
         # ✅ 토크나이저 길이와 vocab 일부 로깅 + 추가 토큰 확인
         try:
+            from accelerate.utils import unwrap_model
+
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
-            mdl = self._unwrap(getattr(ctx, "model", None))
+            mdl = getattr(ctx, "model", None)
+
+            # DDP/Accelerator로 감싸져 있으면 내부 원본 모델 꺼내기
+            if mdl is not None:
+                mdl = unwrap_model(mdl)
 
             if tok is not None and mdl is not None:
                 tok_len = len(tok)
@@ -520,7 +508,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+                    log_tok_model_sync(tok, mdl, tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
             except Exception:
                 pass
             self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
@@ -710,7 +698,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
+                log_tok_model_sync(tok, mdl, tag="before-accel-delete")
         except Exception:
             pass
 
@@ -721,14 +709,14 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             except Exception:
                 pass
 
-            logger.info("Accelerator memory has been freed (object preserved).")
+            logger.info("Accelerator object has been deleted.")
 
             # 삭제 직후  ← 태그 주의: after-accel-delete
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
+                    log_tok_model_sync(tok, mdl, tag="after-accel-delete")
             except Exception:
                 pass
 

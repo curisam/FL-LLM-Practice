@@ -520,7 +520,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+                    log_tok_model_sync(tok, unwrap_model(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
             except Exception:
                 pass
             self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
@@ -710,7 +710,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
+                log_tok_model_sync(tok, unwrap_model(mdl), tag="before-accel-delete")
         except Exception:
             pass
 
@@ -721,14 +721,14 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             except Exception:
                 pass
 
-            logger.info("Accelerator memory has been freed (object preserved).")
+            logger.info("Accelerator object has been deleted.")
 
             # 삭제 직후  ← 태그 주의: after-accel-delete
             try:
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
+                    log_tok_model_sync(tok, unwrap_model(mdl), tag="after-accel-delete")
             except Exception:
                 pass
 
