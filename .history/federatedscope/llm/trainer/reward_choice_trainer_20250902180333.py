@@ -248,6 +248,7 @@ class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 v
         self._set_round_ctx(round_num)  # ← 여기!
         # [수정] current_round를 맨 먼저 정의하여 NameError 해결
         current_round = round_num
+        self.ctx.current_round_num = current_round
 
         scheduler_cfg = getattr(self.cfg.train, "scheduler", None)
         if scheduler_cfg:

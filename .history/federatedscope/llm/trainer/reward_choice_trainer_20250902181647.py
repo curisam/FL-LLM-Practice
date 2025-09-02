@@ -267,6 +267,8 @@ class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 v
         return super().train(target_data_split_name, hooks_set)
 
     def evaluate(self, target_data_split_name="test", hooks_set=None):
+        if round_num is not None:
+            self._set_round_ctx(round_num)
         hooks_set = hooks_set or self.hooks_in_eval
         self._reset_and_build_dataloader(target_data_split_name)
         with torch.no_grad():

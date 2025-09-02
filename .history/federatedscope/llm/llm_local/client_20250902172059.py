@@ -178,7 +178,7 @@ class LLMMultiLoRAClient(Client):
         # results: split routine 돌며 집계된 results (num_total, loss, acc 등) 리턴
         """
 
-        sample_size, model_para_all, results = self.trainer.train(round_num=round)  #여기서 model_para_all은 active 뿐만 아니라 모든 adpater 다 받아온 것. 그리고 DDP여도 .module이 다  제거된 상태.
+        sample_size, model_para_all, results = self.trainer.train()  #여기서 model_para_all은 active 뿐만 아니라 모든 adpater 다 받아온 것. 그리고 DDP여도 .module이 다  제거된 상태.
         if self._cfg.federate.share_local_model and not \
                 self._cfg.federate.online_aggr:
             model_para_all = copy.deepcopy(model_para_all) # 안전하게 복사

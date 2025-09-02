@@ -428,7 +428,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
                 # [디버깅 로그] 현재 LR 출력
                 current_lr = ctx.optimizer.param_groups[0]['lr']
-                round_num = getattr(ctx, 'current_round_num', getattr(ctx, 'cur_round_i', 'N/A'))
+                round_num = getattr(ctx, 'cur_round_i', 'N/A')
                 logger.info(f"Round #{round_num} - Current Learning Rate: {current_lr}")
 
         # prepare statistics
@@ -456,7 +456,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 emb_len = mdl.get_input_embeddings().weight.shape[0]
 
                 # 현재 라운드 번호
-                rnd = getattr(ctx, "current_round_num", getattr(ctx, "cur_round_i", "?"))
+                rnd = getattr(ctx, "current_round_num", getattr(self, "cur_round_i", "?"))
                 # vocab dict
                 vocab_dict = tok.get_vocab()
                 vocab_size = len(vocab_dict)
@@ -729,7 +729,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
             mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
             if tok is not None and mdl is not None:
-                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-free_memory")
+                log_tok_model_sync(tok, self._unwrap(mdl), tag="before-accel-delete")
         except Exception:
             pass
 
@@ -747,7 +747,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
                 mdl = getattr(self, "model", None) or getattr(self.ctx, "model", None)
                 if tok is not None and mdl is not None:
-                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-free_memory")
+                    log_tok_model_sync(tok, self._unwrap(mdl), tag="after-accel-delete")
             except Exception:
                 pass
 
