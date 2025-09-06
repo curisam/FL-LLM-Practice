@@ -6,7 +6,7 @@ federate:
   mode: standalone
   client_num: 53
   sample_client_num: 5
-  total_round_num: 175
+  total_round_num: 300
   save_to: "checkpoints_1.0/tldr_choice_qwen_fedbiscuit_u5.ckpt"
   ignore_weight: True
   save_freq: 25
@@ -28,7 +28,7 @@ llm:
     count: 5
     warmup:
       use: True
-      round: 0
+      round: 25
     grouping:
       use: True
       round: 25

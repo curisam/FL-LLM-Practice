@@ -33,5 +33,5 @@ accelerate launch \
   --config_file fedbiscuit_script/accelerator_config_bf16.yaml \
   --main_process_port 29501 \
   federatedscope/main.py \
-  --cfg fedbiscuit_script/tldr/tldr_choice_qwen_fedbiscuit_u5_1.0.yaml \
+  --cfg fedbiscuit_script/tldr/tldr_choice_qwen_fedbiscuit_u7_1.0.yaml \
   llm.accelerator.use True

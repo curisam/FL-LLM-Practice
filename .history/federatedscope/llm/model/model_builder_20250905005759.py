@@ -171,7 +171,7 @@ def get_llm(config, load_from_prev_ckpt=False, **kwargs):
         ])#"default", "Adapter_0", "Adapter_1", "Adapter_2"의 adapter가 있게 됨. Adapter class인 model은 append_adapters 존재.
 
         # 2) warmup ckpt 불러와 그대로 로드 (여분 어댑터는 자동 무시)
-        ckpt_path = "checkpoints_u10_warmup_1.0/final_tldr_choice_qwen_fedbiscuit_u10_warmup_1.0_round_250.ckpt"
+        ckpt_path = "checkpoints/checkpoints_u10_warmup_1.0/final_tldr_choice_qwen_fedbiscuit_u10_warmup_1.0_round_250.ckpt"
         ckpt = torch.load(ckpt_path, map_location="cpu")
         sd   = ckpt.get("model", ckpt)  # 일부는 바로 state_dict일 수 있음
 

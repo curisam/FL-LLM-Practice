@@ -151,6 +151,29 @@ class DPORewardTrainer(LLMTrainer):
                                     lose_labels, lose_attention_mask,
                                     disable_adapter=False)
 
+        elif ctx.cfg.llm.deepspeed.use:
+            win_input_ids = ctx.data_batch['win_input_ids'].to(ctx.device)
+            win_labels = ctx.data_batch['win_labels'].to(ctx.device)
+            win_attention_mask = ctx.data_batch['win_attention_mask'].to(
+                ctx.device)
+            lose_input_ids = ctx.data_batch['lose_input_ids'].to(ctx.device)
+            lose_labels = ctx.data_batch['lose_labels'].to(ctx.device)
+            lose_attention_mask = ctx.data_batch['lose_attention_mask'].to(
+                ctx.device)
+
+            with torch.no_grad():
+                ref_win_logps, ref_lose_logps = \
+                    self._batch_forward_deepspeed(
+                        ctx, win_input_ids, win_labels, win_attention_mask,
+                        lose_input_ids, lose_labels, lose_attention_mask,
+                        disable_adapter=True)
+
+            adap_win_logps, adap_lose_logps = \
+                self._batch_forward_deepspeed(
+                    ctx, win_input_ids, win_labels, win_attention_mask,
+                    lose_input_ids, lose_labels, lose_attention_mask,
+                    disable_adapter=False)
+
         else:
             win_input_ids = ctx.data_batch['win_input_ids'].to(ctx.device)
             win_labels = ctx.data_batch['win_labels'].to(ctx.device)
@@ -226,6 +249,32 @@ class DPORewardTrainer(LLMTrainer):
 
         return win_logps, lose_logps
 
+    def _batch_forward_deepspeed(self,
+                                 ctx,
+                                 win_input_ids,
+                                 win_labels,
+                                 win_attention_mask,
+                                 lose_input_ids,
+                                 lose_labels,
+                                 lose_attention_mask,
+                                 disable_adapter=False):
+        win_outputs = ctx.model_engine(disable_adapter=disable_adapter,
+                                       input_ids=win_input_ids,
+                                       labels=win_labels,
+                                       attention_mask=win_attention_mask)
+        win_logps = _get_batch_logps(win_outputs.logits,
+                                     win_labels,
+                                     average_log_prob=False)
+
+        lose_outputs = ctx.model_engine(disable_adapter=disable_adapter,
+                                        input_ids=lose_input_ids,
+                                        labels=lose_labels,
+                                        attention_mask=lose_attention_mask)
+        lose_logps = _get_batch_logps(lose_outputs.logits,
+                                      lose_labels,
+                                      average_log_prob=False)
+
+        return win_logps, lose_logps
 
     def _hook_on_batch_backward(self, ctx):
         if ctx.skip_this_batch:
@@ -237,6 +286,12 @@ class DPORewardTrainer(LLMTrainer):
             if ctx.scheduler is not None:
                 ctx.scheduler.step()
             ctx.optimizer.zero_grad()
+
+        elif ctx.cfg.llm.deepspeed.use:
+            ctx.model_engine.backward(ctx.loss_task)
+            ctx.model_engine.step()
+            if ctx.scheduler is not None:
+                ctx.scheduler.step()
 
         else:
             (ctx.loss_task / self.grad_accum_step).backward()

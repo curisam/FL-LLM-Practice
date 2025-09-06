@@ -28,10 +28,10 @@ export FS_LOG_SUMMARY_ALL_RANKS=1
 export TRANSFORMERS_VERBOSITY=error
 
 
-CUDA_VISIBLE_DEVICES=4,5,6,7 \
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
 accelerate launch \
   --config_file fedbiscuit_script/accelerator_config_bf16.yaml \
-  --main_process_port 29501 \
+  --main_process_port 29500 \
   federatedscope/main.py \
-  --cfg fedbiscuit_script/tldr/tldr_choice_qwen_fedbiscuit_u5_1.0.yaml \
+  --cfg fedbiscuit_script/tldr/tldr_choice_qwen_fedbiscuit_u10_1.0.yaml \
   llm.accelerator.use True
