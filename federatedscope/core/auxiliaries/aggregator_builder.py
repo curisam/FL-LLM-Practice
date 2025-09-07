@@ -79,7 +79,7 @@ def get_aggregator(method, model=None, device=None, online=False, config=None):
 
 
     if method.lower() in constants.AGGREGATOR_TYPE: #fedavg이다.
-        aggregator_type = constants.AGGREGATOR_TYPE[method.lower()] #clients_avg
+        aggregator_type = constants.AGGREGATOR_TYPE[method.lower()] #"clients_avg" or "no_communication"
     else: #pass
         aggregator_type = "clients_avg"
         logger.warning(
