@@ -33,6 +33,17 @@ from torch.optim.lr_scheduler import MultiStepLR
 logger = logging.getLogger(__name__)
 sys.setrecursionlimit(100000)
 
+# DDP 안전옵션용
+from accelerate import Accelerator, DistributedDataParallelKwargs
+
+# 모든 랭크 동기화용 배리어
+from federatedscope.llm.utils_dist import barrier_all
+
+
+from federatedscope.llm.misc.debug_utils import log_tok_model_sync
+
+
+
     
 def cal_loss(logits, labels, choices):
 
@@ -70,6 +81,99 @@ def cal_loss(logits, labels, choices):
     return new_logits, new_labels, loss
 
 class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 vocab)에 대해 “다음 토큰이 A냐 B냐만” 보도록 축소해서 **CrossEntropyLoss(B×(T-1) vs 2)**로 학습/평가한다. 
+    def __init__(self, model, data, device, config, only_for_eval=False, monitor=None):
+        super().__init__(model, data, device, config, only_for_eval, monitor)
+
+        #실제 라벨은 " A</s>"= "▁A"+"</s>" or " B</s>"="▁B"+"</s>"인 상황. 최종 목표: "▁A", "▁B" 이렇게 2차원으로 Classifier를 축소.
+        try:
+            # (중요) "choices" 문자열 리스트를 토크나이즈하여
+            # 마지막 토큰 ID만 추출 → 해당 토큰 등장 시 그 위치를 선택지 클래스 라벨로 사용
+            choices_list = [] #"▁A", "▁B"의 token id 추출이 목표.
+            for choice in config.trainer.choices: #config.trainer.choices=["A", "B"]
+                # 앞에 ': '를 붙이는 이유: 프롬프트 형식에서 응답 표기 직후 토큰을 안정적으로 뽑기 위함. add_special_tokens=False:BOS/EOS 같은 스페셜 토큰이 끼어들면 안 되므로.
+                token_ids = self.tokenizer(f': {choice}', add_special_tokens=False)['input_ids']
+                #": A"는 보통 [:, ▁A]처럼 2개 이상 토큰으로 쪼개집니다. 이 중에 **실제로 분류를 갈라주는 건 마지막 토큰(= ▁A)**이죠. 그래서 [-1]만 뽑습니다.
+                if not token_ids: raise ValueError(f"Tokenizer returned empty list for choice: '{choice}'")
+                choices_list.append(token_ids[-1])
+            # CPU 텐서로 보관, 라운드 시작 시 디바이스로 옮김
+            self.choices_cpu = torch.tensor(choices_list, dtype=torch.long)
+            logger.info(f'Choice token IDs: {self.choices_cpu.tolist()}')
+        except Exception as e:
+            logger.error(f"Error during trainer initialization: {e}")
+            raise ValueError('Failed to initialize trainer.choices.')
+        
+
+
+
+
+
+
+
+    @use_diff
+    def train(self, target_data_split_name="train", hooks_set=None, round_num=-1):
+
+        self._set_round_ctx(round_num)  # ← 여기!
+        # [수정] current_round를 맨 먼저 정의하여 NameError 해결
+        current_round = round_num
+
+        scheduler_cfg = getattr(self.cfg.train, "scheduler", None)
+        if scheduler_cfg:
+            initial_lr = self.cfg.train.optimizer.lr
+            milestones = getattr(scheduler_cfg, "milestones", [])
+            gamma = getattr(scheduler_cfg, "gamma", 1.0)
+            
+            num_decays = sum(1 for milestone in sorted(milestones) if current_round >= milestone)
+            new_lr = initial_lr * (gamma ** num_decays)
+            
+            self.ctx.new_lr_to_be_set = new_lr
+            logger.info(
+                f"[Stateless LR Controller] In Round #{current_round}, planning to set LR to {new_lr:.2e}"
+            )
+
+        self._reset_and_build_dataloader(target_data_split_name)
+        return super().train(target_data_split_name, hooks_set)
+
+    def evaluate(self, target_data_split_name="test", hooks_set=None):
+        hooks_set = hooks_set or self.hooks_in_eval
+        self._reset_and_build_dataloader(target_data_split_name)
+        with torch.no_grad():
+            if self.ctx.check_split(target_data_split_name, skip=True):
+                self._run_routine(MODE.TEST, hooks_set, target_data_split_name)
+            else:
+                self.ctx.eval_metrics = dict()
+        return self.ctx.eval_metrics
+
+    def _hook_on_fit_start_init(self, ctx):
+        super()._hook_on_fit_start_init(ctx)
+        
+        if hasattr(ctx, "new_lr_to_be_set"):
+            new_lr = ctx.new_lr_to_be_set
+            if hasattr(ctx, 'optimizer') and ctx.optimizer is not None:
+                opt = ctx.optimizer
+                for param_group in opt.param_groups:
+                    param_group['lr'] = new_lr
+                logger.info(f"Successfully applied new LR {new_lr:.2e} to the optimizer.")
+                del ctx.new_lr_to_be_set
+     
+        current_round = int(getattr(ctx, "current_round_num", getattr(ctx, "cur_state", 0)))
+        self.choices = self.choices_cpu.to(ctx.device, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
+ 
+
+        # train/val/test 성능 측정용 카운터 리셋
+        for sp in ["train", "val", "test"]:
+            setattr(ctx, f"num_samples_{sp}", 0)
+            setattr(ctx, f"loss_total_{sp}", 0.0)
+            setattr(ctx, f"correct_{sp}", 0)
+
+        #라운드 전체 카운터 리셋
+
+        ctx.num_samples = 0
+        ctx.loss_batch_total = 0.0
+        ctx.loss_regular_total = 0.0
+
+
+        ctx.sample_seen = 0
+        ctx.sample_correct_accum = 0
 
 
     def _hook_on_batch_forward(self, ctx): #참고
@@ -196,7 +300,79 @@ class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 v
  
 
  
+    def _hook_on_batch_end(self, ctx): #👉 한 배치(batch)를 끝낼 때 호출되는 후처리 hook
+        #1) 스킵 처리
+        skip = getattr(ctx, "skip_this_batch", False)
+        if isinstance(skip, CtxVar):
+            try:
+                skip = bool(skip)
+            except Exception:
+                skip = False
+        if skip:
+            return
 
+        #2) (옵션) 배치별 LR 디버깅. 스케쥴러 적용 확인용.
+        if ctx.cur_mode == MODE.TRAIN:
+            opt = getattr(ctx, "optimizer", None)
+            if opt is not None:
+                current_lr = opt.param_groups[0]["lr"]
+                round_idx = getattr(ctx, "current_round_num", "?")
+                batch_idx = getattr(ctx, "batch_idx", "?")
+                # logger.info(f"[LR BATCH CHECK] round={round_idx} batch={batch_idx} -> LR={current_lr:.2e}")
+
+        
+        #3) 통계 집계시 키 초기화
+        # 누적 집계 키
+        split = ctx.cur_split
+
+        loss_total_key = f"loss_total_{split}"
+        num_samples_key = f"num_samples_{split}"
+
+
+        if not hasattr(ctx, loss_total_key):
+            setattr(ctx, loss_total_key, 0.0)
+
+        if not hasattr(ctx, num_samples_key):
+            setattr(ctx, num_samples_key, 0)
+
+        #4) 배치 단위 통계
+        batch_raw_samples = int(ctx.batch_size) #배치 내의 전체 샘플 수
+        batch_logic_seen = int(getattr(ctx, "sample_count_batch", 0)) #배치 내의 유효한 샘플 수
+        batch_logic_corr = int(getattr(ctx, "sample_correct_batch", 0)) #배치 내의 유효한 샘플들 중 맞춘 것들의 갯수
+
+        #split 동안 누적 sample 수 맟 loss 총합
+        setattr(
+            ctx,
+            loss_total_key,
+            getattr(ctx, loss_total_key) + ctx.loss_batch.item() * batch_raw_samples,
+        )
+
+        setattr(
+            ctx,
+            num_samples_key,
+            getattr(ctx, num_samples_key) + batch_raw_samples,
+        )
+
+
+        #5) 정확도 누적,  논리적(선택된) 토큰 기준 정확도 집계
+        ctx.sample_seen = int(getattr(ctx, "sample_seen", 0)) + batch_logic_seen
+        ctx.sample_correct_accum = int(getattr(ctx, "sample_correct_accum", 0)) + batch_logic_corr
+
+        #6) Loss 세부 집계
+        ctx.num_samples = int(getattr(ctx, "num_samples", 0)) + batch_raw_samples
+        ctx.loss_batch_total = float(getattr(ctx, "loss_batch_total", 0.0)) + ctx.loss_batch.item() * batch_raw_samples
+        ctx.loss_regular_total = float(getattr(ctx, "loss_regular_total", 0.0)) + float(ctx.get("loss_regular", 0.0))
+
+        #7) 검증/테스트: Prediction 정보 저장
+        if ctx.cur_mode in [MODE.TEST, MODE.VAL]:
+            if not hasattr(ctx, "ys_true"):
+                ctx.ys_true = []
+            if not hasattr(ctx, "ys_pred"):
+                ctx.ys_pred = []
+
+            pred = torch.argmax(ctx.y_prob, dim=-1)
+            ctx.ys_true.append(ctx.y_true)
+            ctx.ys_pred.append(pred)
 
 
 def call_reward_choice_trainer(trainer_type):

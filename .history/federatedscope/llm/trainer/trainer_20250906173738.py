@@ -42,7 +42,7 @@ from federatedscope.llm.misc.debug_utils import log_tok_model_sync
 
 
 
-import os
+
 
 
 
@@ -161,26 +161,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True)
         except Exception:
             pass
-
-
-        #실제 라벨은 " A</s>"= "▁A"+"</s>" or " B</s>"="▁B"+"</s>"인 상황. 최종 목표: "▁A", "▁B" 이렇게 2차원으로 Classifier를 축소.
-        try:
-            # (중요) "choices" 문자열 리스트를 토크나이즈하여
-            # 마지막 토큰 ID만 추출 → 해당 토큰 등장 시 그 위치를 선택지 클래스 라벨로 사용
-            choices_list = [] #"▁A", "▁B"의 token id 추출이 목표.
-            for choice in config.trainer.choices: #config.trainer.choices=["A", "B"]
-                # 앞에 ': '를 붙이는 이유: 프롬프트 형식에서 응답 표기 직후 토큰을 안정적으로 뽑기 위함. add_special_tokens=False:BOS/EOS 같은 스페셜 토큰이 끼어들면 안 되므로.
-                token_ids = self.tokenizer(f': {choice}', add_special_tokens=False)['input_ids']
-                #": A"는 보통 [:, ▁A]처럼 2개 이상 토큰으로 쪼개집니다. 이 중에 **실제로 분류를 갈라주는 건 마지막 토큰(= ▁A)**이죠. 그래서 [-1]만 뽑습니다.
-                if not token_ids: raise ValueError(f"Tokenizer returned empty list for choice: '{choice}'")
-                choices_list.append(token_ids[-1])
-            # CPU 텐서로 보관, 라운드 시작 시 디바이스로 옮김
-            self.choices_cpu = torch.tensor(choices_list, dtype=torch.long)
-            logger.info(f'Choice token IDs: {self.choices_cpu.tolist()}')
-        except Exception as e:
-            logger.error(f"Error during trainer initialization: {e}")
-            raise ValueError('Failed to initialize trainer.choices.')
-
 
 
     def _reset_and_build_dataloader(self, split_name): #학습/평가에 들어가기 직전마다 로더를 다시 만들고(샤딩 반영)
@@ -309,9 +289,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 pass
             
             barrier_all()
-            if torch.cuda.is_available():                      
-                torch.cuda.synchronize()
-
+            torch.cuda.synchronize()
 
 
 
@@ -359,49 +337,6 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         #추가적으로 memory 절약용 hook 등록:
         self.register_hook_in_eval(self._hook_on_fit_end_free_space,
                                    "on_fit_end")
-
-
-
-
-    @use_diff
-    def train(self, target_data_split_name="train", hooks_set=None, round_num=-1):
-
-        self._set_round_ctx(round_num)  # ← 여기!
-        # [수정] current_round를 맨 먼저 정의하여 NameError 해결
-        current_round = round_num
-
-        scheduler_cfg = getattr(self.cfg.train, "scheduler", None)
-        if scheduler_cfg:
-            initial_lr = self.cfg.train.optimizer.lr
-            milestones = getattr(scheduler_cfg, "milestones", [])
-            gamma = getattr(scheduler_cfg, "gamma", 1.0)
-            
-            num_decays = sum(1 for milestone in sorted(milestones) if current_round >= milestone)
-            new_lr = initial_lr * (gamma ** num_decays)
-            
-            self.ctx.new_lr_to_be_set = new_lr
-            logger.info(
-                f"[Stateless LR Controller] In Round #{current_round}, planning to set LR to {new_lr:.2e}"
-            )
-
-        self._reset_and_build_dataloader(target_data_split_name)
-        return super().train(target_data_split_name, hooks_set)
-
-    def evaluate(self, target_data_split_name="test", hooks_set=None):
-        hooks_set = hooks_set or self.hooks_in_eval
-        self._reset_and_build_dataloader(target_data_split_name)
-        with torch.no_grad():
-            if self.ctx.check_split(target_data_split_name, skip=True):
-                self._run_routine(MODE.TEST, hooks_set, target_data_split_name)
-            else:
-                self.ctx.eval_metrics = dict()
-        return self.ctx.eval_metrics
-
-
-
-
-
-
 
     @lifecycle(LIFECYCLE.BATCH)
     #업데이트 1회를 어떻게 만드는지를 결정.
@@ -679,37 +614,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         ctx.ys_true = CtxVar([], LIFECYCLE.ROUTINE)
         ctx.ys_prob = CtxVar([], LIFECYCLE.ROUTINE)
 
-        ctx.sample_seen = CtxVar(0, LIFECYCLE.ROUTINE)
-        ctx.sample_correct_accum = CtxVar(0, LIFECYCLE.ROUTINE)
-
-
-
         if hasattr(ctx, 'ys_pred'): 
             ctx.ys_pred = CtxVar([], LIFECYCLE.ROUTINE)
-
-
-        if hasattr(ctx, "new_lr_to_be_set"):
-            new_lr = ctx.new_lr_to_be_set
-            if hasattr(ctx, 'optimizer') and ctx.optimizer is not None:
-                opt = ctx.optimizer
-                for param_group in opt.param_groups:
-                    param_group['lr'] = new_lr
-                logger.info(f"Successfully applied new LR {new_lr:.2e} to the optimizer.")
-                del ctx.new_lr_to_be_set
-     
-        current_round = int(getattr(ctx, "current_round_num", getattr(ctx, "cur_state", 0)))
- 
-        # train/val/test 성능 측정용 카운터 리셋
-        for sp in ["train", "val", "test"]:
-            setattr(ctx, f"num_samples_{sp}", 0)
-            setattr(ctx, f"loss_total_{sp}", 0.0)
-            setattr(ctx, f"correct_{sp}", 0)
-
-        self.choices = self.choices_cpu.to(ctx.device, dtype=torch.long, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
-
-
-
-
 
  
     #local process에서만 일어나는 일. 각 rank가 자기 shard된 미니배치를 forward 하고 loss를 계산하는 것.
@@ -752,7 +658,21 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
         """
 
- 
+        if not hasattr(self, "_logged_first_fwd_round") or self._logged_first_fwd_round != getattr(self.ctx, "current_round_num", None):
+            try:
+                tok = getattr(self, "tokenizer", None) or getattr(self.ctx, "tokenizer", None)
+                mdl = getattr(self.ctx, "model", None)
+                if tok is not None and mdl is not None:
+                    log_tok_model_sync(tok, self._unwrap(mdl), tag=f"before-first-forward@round{getattr(self.ctx,'current_round_num','?')}")
+            except Exception:
+                pass
+            self._logged_first_fwd_round = getattr(self.ctx, "current_round_num", None)
+
+
+
+
+
+
         #LLM 학습용 Dataset은 보통 tokenized_dict를 반환->{'input_ids': Tensor, 'labels': Tensor, 'attention_mask': Tensor}
         #accelerator는 입력 텐서를 자동으로 디바이스에 올려줘서 .to(ctx.device)가 필요 없음.
 
@@ -760,152 +680,57 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         #input_ids: [101,  42,  53,  78,   2]
         #labels:    [101,  42,  53,  78,   2]  # 혹은 일부 -100 포함
         #이렇게 거의 같지만, loss 계산에서 무시할 토큰은 labels에서만 바뀜.
-
-        # ---- 임베딩 경계 초과 가드 ----
-        try:
-            base_model = self._unwrap(getattr(self.ctx, "model", None))
-            if base_model is not None and "input_ids" in self.ctx.data_batch:
-                emb_rows = base_model.get_input_embeddings().weight.shape[0]
-                # 빠른 장치 무관 max (GPU 텐서면 .amax)
-                mx = int(self.ctx.data_batch["input_ids"].amax().item())
-                if mx >= emb_rows:
-                    rk = getattr(self.accelerator, "process_index", "?") if getattr(self, "accelerator", None) else "?"
-                    logger.error(f"[TOK_OVF] rank={rk} max_id={mx} >= emb_rows={emb_rows} | split={self.ctx.cur_split}")
-                    raise RuntimeError(f"Token id overflow: {mx} >= {emb_rows}")
-        except Exception:
-            pass
-
-        # 1) 입력 준비
+        
         input_ids = ctx.data_batch['input_ids'].to(ctx.device)
         labels = ctx.data_batch['labels'].to(ctx.device)
         attention_mask = ctx.data_batch['attention_mask'].to(ctx.device)
 
-        # 2) 모델 실행 
-        if ctx.cfg.llm.accelerator.use: #참고, #ctx.model 기반으로 outputs 뽑아낸다.
-            outputs = ctx.model(
-                input_ids=input_ids,
-                labels=labels,
-                attention_mask=attention_mask,
-            )
-        elif ctx.cfg.llm.deepspeed.use: #ctx.model_engine 기반으로 outputs 뽑아낸다.
-            outputs = ctx.model_engine(
-                input_ids=input_ids,
-                labels=labels,
-                attention_mask=attention_mask,
-            )
-        else: #참고, #ctx.model 기반으로 outputs 뽑아낸다.
-            outputs = ctx.model(
-                input_ids=input_ids,
-                labels=labels,
-                attention_mask=attention_mask,
-            )
+        if ctx.cfg.llm.accelerator.use: #참고
 
-        logits = outputs.logits #일반적으로 LLM에서는 [batch_size, seq_len, vocab_size] :=[B,T,V] shape의 tensor
+
+            #모델 호출이 model(x) → model(input_ids=..., labels=...)로 바뀜→ loss를 직접 criterion으로 계산하지 않고, 모델 자체가 계산해서 outputs.loss로 줌. loss는 cross-entropy로 적용하게 hugging face가 설계. forward를 override하면 loss 바꾸는 것 가능.
+            outputs = ctx.model(input_ids=input_ids,
+                                labels=labels,
+                                attention_mask=attention_mask) # 자동으로 모델과 배치 텐서 모두 디바이스로 이동
+
+        elif ctx.cfg.llm.deepspeed.use: #ctx.model_engine 기반으로 outputs 뽑아낸다.
+
+            outputs = ctx.model_engine(input_ids=input_ids,
+                                       labels=labels,
+                                       attention_mask=attention_mask)
+
+        else:#참고, #ctx.model 기반으로 outputs 뽑아낸다.
+
+            outputs = ctx.model(input_ids=input_ids,
+                                labels=labels,
+                                attention_mask=attention_mask)
+
+        logits = outputs.logits #일반적으로 LLM에서는 [batch_size, seq_len, vocab_size] shape의 tensor
         loss = outputs.loss #일부 모델에서 reduction='none'이면 shape가 [batch_size] 혹은 [batch_size, seq_len]일 수도 있지만, 대부분은 1개의 스칼라 값
 
         # NaN/Inf 모두 방어
-        if not torch.isfinite(loss): #LM 학습에서는 종종 NaN loss가 발생할 수 있음-> label이 모두 -100 (ignore index). precision 문제 (e.g., bf16/float16). exploding gradients, bad initialization
-            ctx.skip_this_batch = CtxVar(True, LIFECYCLE.BATCH) #다른 hook에서 이 값이 True면 이 배치를 건너뜀. (예: loss.backward() 스킵)
+        if not torch.isfinite(loss):
+            ctx.skip_this_batch = CtxVar(True, LIFECYCLE.BATCH)
             logger.warning(f"Skip batch: non-finite loss={loss.item()}")
             return
         else:
             ctx.skip_this_batch = CtxVar(False, LIFECYCLE.BATCH)
 
- 
+        # #NaN loss가 발생시키는 batch 건너뛰기 위한 방어 로직
+        # if torch.isnan(loss): #LM 학습에서는 종종 NaN loss가 발생할 수 있음-> label이 모두 -100 (ignore index). precision 문제 (e.g., bf16/float16). exploding gradients, bad initialization
+        #     ctx.skip_this_batch = CtxVar(True, LIFECYCLE.BATCH) #다른 hook에서 이 값이 True면 이 배치를 건너뜀. (예: loss.backward() 스킵)
+        #     logger.warning('Skip the batch due to the loss is NaN, '
+        #                    'it may be caused by exceeding the precision or '
+        #                    'invalid labels.')
+        #     return
+        # else:
+        #     ctx.skip_this_batch = CtxVar(False, LIFECYCLE.BATCH)
 
-        # 4) 일반 LM 메트릭용 저장
         ctx.y_true = CtxVar(labels, LIFECYCLE.BATCH) #shape: [batch_size, seq_len]
         ctx.y_prob = CtxVar(logits, LIFECYCLE.BATCH) # shape: [batch_size, seq_len, vocab_size]
+ 
         ctx.loss_batch = CtxVar(loss, LIFECYCLE.BATCH)
         ctx.batch_size = CtxVar(len(labels), LIFECYCLE.BATCH)
-
-
-    
-        # 5) A/B 선택 정확도(첫 유효 토큰) 추가 집계
-        #    - self.choices: [C] (예: 2) 형태의 토큰 ID 텐서 (디바이스에 올라와 있어야 함)
-        #    - labels에서 ' A' 또는 ' B'가 들어간 첫 위치를 찾고, 그 위치의 로짓에서 두 클래스만 비교
-        try:
-            choice_ids = self.choices  # shape [C], 예: tensor([id_A, id_B], device=...)
-            # labels가 choice 중 하나인 위치 마스크: [B, T]
-            """
-            labels[..., None]          # == labels.unsqueeze(-1) → [B, T, 1]
-            choice_ids[None, None, :]  # → [1, 1, C]
-            (labels[..., None] == choice_ids[None, None, :])# → [B, T, C]
-            """
-            is_choice = (labels[..., None] == choice_ids[None, None, :]).any(dim=-1)# → [B, T]
-            has_choice = is_choice.any(dim=1)  # [B]
-
-            if has_choice.any():
-                B, T, V = logits.shape
-                device = labels.device
-
-                #샘플별 “첫 번째” choice 위치 찾기
-                """
-                is_choice.int()는 True/False → 1/0.
-                argmax(dim=1)는 각 샘플(b)에 대해 가장 먼저 1이 나오는 t를 돌려줌 → “첫 choice 위치”.
-                """
-                first_idx = torch.argmax(is_choice.int(), dim=1)                  # [B]
-
-                """
-                has_choice==False인 샘플은 제외하기 위해, 선택 마스크 has_choice로 인덱싱:
-                    sel_b: 실제로 choice가 있는 샘플들의 배치 인덱스들 (M개)
-
-                    sel_t: 그 샘플 각각에서의 “첫 choice 토큰”의 위치 (길이 M)
-                """
-                sel_b = torch.arange(B, device=device)[has_choice]                # [M]
-                sel_t = first_idx[has_choice]                                     # [M]
-
-                # 수정
-                sel_t_pred = sel_t - 1                          # 예측용 로짓의 시간축 인덱스
-                valid = sel_t_pred >= 0                         # 혹시 0인 케이스 방지
-                sel_b      = sel_b[valid]
-                sel_t      = sel_t[valid]
-                sel_t_pred = sel_t_pred[valid]
-
-
-                # ⬇️ 비어 있으면 안전 종료 (argmax가 빈 텐서에서 터질 수 있음)
-                if sel_b.numel() == 0:
-                    ctx.sample_correct_batch = 0
-                    ctx.sample_count_batch   = 0
-                    return
-
-
-
-                # M개 샘플 각각에 대해 “첫 choice 위치 t=sel_t”에서의 어휘 전체(V) 로짓을 뽑음.
-                logits_at   = logits[sel_b, sel_t_pred, :]   # [M, V]
-
-                # 해당 위치의 정답 토큰 ID (id_A 또는 id_B)
-                targets_tok = labels[sel_b, sel_t]                                # [M]
-
-
-                # 선택지 두(여러) 클래스 로짓만 뽑기 → [M, C]
-                logits_choice = logits_at.index_select(dim=1, index=choice_ids)
-
-
-
-                # (targets_tok == choice_ids) 비교로 [M, C] bool 만들고, argmax로 위치(0 or 1)를 뽑음.
-                #   id_A면 0, id_B면 1이 됨.
-                target_idx = (targets_tok.unsqueeze(1) == choice_ids.unsqueeze(0)).long().argmax(dim=1)  # [M]
-
-                #예측 클래스
-                pred_idx = torch.argmax(logits_choice, dim=-1)                    # [M]
-
-                #정확도 계산
-                sample_correct = int((pred_idx == target_idx).sum().item()) #정답과 비교해 M개 중 맞춘 개수
-                sample_count   = int(target_idx.numel())
-            else:
-                sample_correct, sample_count = 0, 0
-
-            ctx.sample_correct_batch = sample_correct
-            ctx.sample_count_batch   = sample_count
-        except Exception as e:
-            # 메트릭 실패해도 학습은 계속
-            logger.warning(f"[choice-metrics] skipped due to error: {e}")
-            ctx.sample_correct_batch = 0
-            ctx.sample_count_batch   = 0
-
-
-
 
 
     # grad accumulation loop는 rank별로 local에서만 동작.
@@ -977,8 +802,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
 
 
-    def _hook_on_batch_end(self, ctx): #👉 한 배치(batch)를 끝낼 때 호출되는 후처리 hook
-        #1) 스킵 처리
+    def _hook_on_batch_end(self, ctx): #NaN loss일 경우 retry 로직 추가
+
         """
         기본 로직 + loss == NaN일 경우 batch를 retry
 
@@ -995,68 +820,9 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                     self._run_batch(self.hooks_in_ft, run_step=1)
             return
 
-        #2) (옵션) 배치별 LR 디버깅. 스케쥴러 적용 확인용.
-        if ctx.cur_mode == MODE.TRAIN:
-            opt = getattr(ctx, "optimizer", None)
-            if opt is not None:
-                current_lr = opt.param_groups[0]["lr"]
-                round_idx = getattr(ctx, "current_round_num", "?")
-                batch_idx = getattr(ctx, "batch_idx", "?")
-                # logger.info(f"[LR BATCH CHECK] round={round_idx} batch={batch_idx} -> LR={current_lr:.2e}")
-
-        
-        #3) 통계 집계시 키 초기화
-        # 누적 집계 키
-        split = ctx.cur_split
-
-        loss_total_key = f"loss_total_{split}"
-        num_samples_key = f"num_samples_{split}"
-
-
-        if not hasattr(ctx, loss_total_key):
-            setattr(ctx, loss_total_key, 0.0)
-
-        if not hasattr(ctx, num_samples_key):
-            setattr(ctx, num_samples_key, 0)
-
-        #4) 배치 단위 통계
-        batch_raw_samples = int(ctx.batch_size) #배치 내의 전체 샘플 수
-        batch_logic_seen = int(getattr(ctx, "sample_count_batch", 0)) #배치 내의 유효한 샘플 수
-        batch_logic_corr = int(getattr(ctx, "sample_correct_batch", 0)) #배치 내의 유효한 샘플들 중 맞춘 것들의 갯수
-
-        #split 동안 누적 sample 수 맟 loss 총합
-        setattr(
-            ctx,
-            loss_total_key,
-            getattr(ctx, loss_total_key) + ctx.loss_batch.item() * batch_raw_samples,
-        )
-
-        setattr(
-            ctx,
-            num_samples_key,
-            getattr(ctx, num_samples_key) + batch_raw_samples,
-        )
-
-
-        #5) 정확도 누적,  논리적(선택된) 토큰 기준 정확도 집계
-        ctx.sample_seen = int(getattr(ctx, "sample_seen", 0)) + batch_logic_seen
-        ctx.sample_correct_accum = int(getattr(ctx, "sample_correct_accum", 0)) + batch_logic_corr
-
-        #6) Loss 세부 집계
-        ctx.num_samples = int(getattr(ctx, "num_samples", 0)) + batch_raw_samples
-        ctx.loss_batch_total = float(getattr(ctx, "loss_batch_total", 0.0)) + ctx.loss_batch.item() * batch_raw_samples
-        ctx.loss_regular_total = float(getattr(ctx, "loss_regular_total", 0.0)) + float(ctx.get("loss_regular", 0.0))
-
-        #7) 검증/테스트: Prediction 정보 저장
-        if ctx.cur_mode in [MODE.TEST, MODE.VAL]:
-            if not hasattr(ctx, "ys_true"):
-                ctx.ys_true = []
-            if not hasattr(ctx, "ys_pred"):
-                ctx.ys_pred = []
-
-            pred = torch.argmax(ctx.y_prob, dim=-1)
-            ctx.ys_true.append(ctx.y_true)
-            ctx.ys_pred.append(pred)
+        ctx.num_samples += ctx.batch_size
+        ctx.loss_batch_total += ctx.loss_batch.item() * ctx.batch_size
+        ctx.loss_regular_total += float(ctx.get("loss_regular", 0.))
 
 
     def _hook_on_fit_end(self, ctx): 

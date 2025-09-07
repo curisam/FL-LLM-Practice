@@ -42,7 +42,7 @@ from federatedscope.llm.misc.debug_utils import log_tok_model_sync
 
 
 
-import os
+
 
 
 
@@ -705,7 +705,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             setattr(ctx, f"loss_total_{sp}", 0.0)
             setattr(ctx, f"correct_{sp}", 0)
 
-        self.choices = self.choices_cpu.to(ctx.device, dtype=torch.long, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
+
+       self.choices = self.choices_cpu.to(ctx.device, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
 
 
 
@@ -838,60 +839,22 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             if has_choice.any():
                 B, T, V = logits.shape
                 device = labels.device
-
-                #샘플별 “첫 번째” choice 위치 찾기
-                """
-                is_choice.int()는 True/False → 1/0.
-                argmax(dim=1)는 각 샘플(b)에 대해 가장 먼저 1이 나오는 t를 돌려줌 → “첫 choice 위치”.
-                """
                 first_idx = torch.argmax(is_choice.int(), dim=1)                  # [B]
-
-                """
-                has_choice==False인 샘플은 제외하기 위해, 선택 마스크 has_choice로 인덱싱:
-                    sel_b: 실제로 choice가 있는 샘플들의 배치 인덱스들 (M개)
-
-                    sel_t: 그 샘플 각각에서의 “첫 choice 토큰”의 위치 (길이 M)
-                """
                 sel_b = torch.arange(B, device=device)[has_choice]                # [M]
                 sel_t = first_idx[has_choice]                                     # [M]
 
-                # 수정
-                sel_t_pred = sel_t - 1                          # 예측용 로짓의 시간축 인덱스
-                valid = sel_t_pred >= 0                         # 혹시 0인 케이스 방지
-                sel_b      = sel_b[valid]
-                sel_t      = sel_t[valid]
-                sel_t_pred = sel_t_pred[valid]
-
-
-                # ⬇️ 비어 있으면 안전 종료 (argmax가 빈 텐서에서 터질 수 있음)
-                if sel_b.numel() == 0:
-                    ctx.sample_correct_batch = 0
-                    ctx.sample_count_batch   = 0
-                    return
-
-
-
-                # M개 샘플 각각에 대해 “첫 choice 위치 t=sel_t”에서의 어휘 전체(V) 로짓을 뽑음.
-                logits_at   = logits[sel_b, sel_t_pred, :]   # [M, V]
-
-                # 해당 위치의 정답 토큰 ID (id_A 또는 id_B)
-                targets_tok = labels[sel_b, sel_t]                                # [M]
-
-
+                # 해당 위치 로짓 취득
+                logits_at = logits[sel_b, sel_t, :]                               # [M, V]
                 # 선택지 두(여러) 클래스 로짓만 뽑기 → [M, C]
                 logits_choice = logits_at.index_select(dim=1, index=choice_ids)
 
-
-
-                # (targets_tok == choice_ids) 비교로 [M, C] bool 만들고, argmax로 위치(0 or 1)를 뽑음.
-                #   id_A면 0, id_B면 1이 됨.
+                # 정답 인덱스: labels의 해당 토큰이 choice_ids 중 몇 번째인지
+                targets_tok = labels[sel_b, sel_t]                                # [M]
+                # one-hot 매칭 후 argmax로 index 구함
                 target_idx = (targets_tok.unsqueeze(1) == choice_ids.unsqueeze(0)).long().argmax(dim=1)  # [M]
 
-                #예측 클래스
                 pred_idx = torch.argmax(logits_choice, dim=-1)                    # [M]
-
-                #정확도 계산
-                sample_correct = int((pred_idx == target_idx).sum().item()) #정답과 비교해 M개 중 맞춘 개수
+                sample_correct = int((pred_idx == target_idx).sum().item())
                 sample_count   = int(target_idx.numel())
             else:
                 sample_correct, sample_count = 0, 0

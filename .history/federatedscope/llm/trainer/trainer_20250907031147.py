@@ -42,7 +42,7 @@ from federatedscope.llm.misc.debug_utils import log_tok_model_sync
 
 
 
-import os
+
 
 
 
@@ -705,7 +705,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             setattr(ctx, f"loss_total_{sp}", 0.0)
             setattr(ctx, f"correct_{sp}", 0)
 
-        self.choices = self.choices_cpu.to(ctx.device, dtype=torch.long, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
+
+       self.choices = self.choices_cpu.to(ctx.device, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
 
 
 
@@ -855,33 +856,13 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                 sel_b = torch.arange(B, device=device)[has_choice]                # [M]
                 sel_t = first_idx[has_choice]                                     # [M]
 
-                # 수정
-                sel_t_pred = sel_t - 1                          # 예측용 로짓의 시간축 인덱스
-                valid = sel_t_pred >= 0                         # 혹시 0인 케이스 방지
-                sel_b      = sel_b[valid]
-                sel_t      = sel_t[valid]
-                sel_t_pred = sel_t_pred[valid]
-
-
-                # ⬇️ 비어 있으면 안전 종료 (argmax가 빈 텐서에서 터질 수 있음)
-                if sel_b.numel() == 0:
-                    ctx.sample_correct_batch = 0
-                    ctx.sample_count_batch   = 0
-                    return
-
-
-
                 # M개 샘플 각각에 대해 “첫 choice 위치 t=sel_t”에서의 어휘 전체(V) 로짓을 뽑음.
-                logits_at   = logits[sel_b, sel_t_pred, :]   # [M, V]
-
-                # 해당 위치의 정답 토큰 ID (id_A 또는 id_B)
-                targets_tok = labels[sel_b, sel_t]                                # [M]
-
-
+                logits_at = logits[sel_b, sel_t, :]                               # [M, V]
                 # 선택지 두(여러) 클래스 로짓만 뽑기 → [M, C]
                 logits_choice = logits_at.index_select(dim=1, index=choice_ids)
 
-
+                # 해당 위치의 정답 토큰 ID (id_A 또는 id_B)
+                targets_tok = labels[sel_b, sel_t]                                # [M]
 
                 # (targets_tok == choice_ids) 비교로 [M, C] bool 만들고, argmax로 위치(0 or 1)를 뽑음.
                 #   id_A면 0, id_B면 1이 됨.

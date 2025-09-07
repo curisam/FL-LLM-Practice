@@ -705,7 +705,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             setattr(ctx, f"loss_total_{sp}", 0.0)
             setattr(ctx, f"correct_{sp}", 0)
 
-        self.choices = self.choices_cpu.to(ctx.device, dtype=torch.long, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
+
+       self.choices = self.choices_cpu.to(ctx.device, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.
 
 
 

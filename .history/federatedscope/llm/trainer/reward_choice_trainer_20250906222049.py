@@ -70,6 +70,31 @@ def cal_loss(logits, labels, choices):
     return new_logits, new_labels, loss
 
 class RewardChoiceTrainer(LLMTrainer): #LLM이 뱉는 logits[B, T, V](V=전체 vocab)에 대해 “다음 토큰이 A냐 B냐만” 보도록 축소해서 **CrossEntropyLoss(B×(T-1) vs 2)**로 학습/평가한다. 
+    def __init__(self, model, data, device, config, only_for_eval=False, monitor=None):
+        super().__init__(model, data, device, config, only_for_eval, monitor)
+
+        #실제 라벨은 " A</s>"= "▁A"+"</s>" or " B</s>"="▁B"+"</s>"인 상황. 최종 목표: "▁A", "▁B" 이렇게 2차원으로 Classifier를 축소.
+        try:
+            # (중요) "choices" 문자열 리스트를 토크나이즈하여
+            # 마지막 토큰 ID만 추출 → 해당 토큰 등장 시 그 위치를 선택지 클래스 라벨로 사용
+            choices_list = [] #"▁A", "▁B"의 token id 추출이 목표.
+            for choice in config.trainer.choices: #config.trainer.choices=["A", "B"]
+                # 앞에 ': '를 붙이는 이유: 프롬프트 형식에서 응답 표기 직후 토큰을 안정적으로 뽑기 위함. add_special_tokens=False:BOS/EOS 같은 스페셜 토큰이 끼어들면 안 되므로.
+                token_ids = self.tokenizer(f': {choice}', add_special_tokens=False)['input_ids']
+                #": A"는 보통 [:, ▁A]처럼 2개 이상 토큰으로 쪼개집니다. 이 중에 **실제로 분류를 갈라주는 건 마지막 토큰(= ▁A)**이죠. 그래서 [-1]만 뽑습니다.
+                if not token_ids: raise ValueError(f"Tokenizer returned empty list for choice: '{choice}'")
+                choices_list.append(token_ids[-1])
+            # CPU 텐서로 보관, 라운드 시작 시 디바이스로 옮김
+            self.choices_cpu = torch.tensor(choices_list, dtype=torch.long)
+            logger.info(f'Choice token IDs: {self.choices_cpu.tolist()}')
+        except Exception as e:
+            logger.error(f"Error during trainer initialization: {e}")
+            raise ValueError('Failed to initialize trainer.choices.')
+
+    def _hook_on_fit_start_init(self, ctx):  #accelerate 및 deepspeed 지원 추가
+        super().__init__(ctx)
+
+        self.choices = self.choices_cpu.to(ctx.device, non_blocking=True) #non_blocking=True는 pinned memory 환경에서 async copy 허용 → 성능 최적화.      
 
 
     def _hook_on_batch_forward(self, ctx): #참고
