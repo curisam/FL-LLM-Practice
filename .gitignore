@@ -6,3 +6,4 @@ trash/
 federatedscope/trash/
 final_data_splits/
 checkpoints*/
+runs_logs/
