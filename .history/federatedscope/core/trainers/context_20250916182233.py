@@ -430,7 +430,7 @@ class Context(LifecycleDict): #LifecycleDict를 상속받아 모델, 설정(cfg)
             )
 
             # ✅ DEBUG 레벨 로깅 (필요할 때만 켜세요)
-            logger.info(
+            logger.debug(
                 "[calc/train] split=%s size=%d bs=%d drop_last=%s lus=%d gac=%d "
                 "=> num_batch=%d, last_epoch=%s, num_epoch=%d, total=%s",
                 split, data_size, bs, drop_last, lus, gac,
@@ -442,7 +442,7 @@ class Context(LifecycleDict): #LifecycleDict를 상속받아 모델, 설정(cfg)
             num_epoch = 1
             num_batch = data_size // bs + int(not drop_last and bool(data_size % bs))
 
-            logger.info(
+            logger.debug(
                 "[calc/%s] split=%s size=%d bs=%d drop_last=%s => num_batch=%d, num_epoch=%d",
                 mode, split, data_size, bs, drop_last, num_batch, num_epoch
             )

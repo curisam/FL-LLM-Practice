@@ -312,6 +312,7 @@ class Context(LifecycleDict): #LifecycleDict를 상속받아 모델, 설정(cfg)
     def num_train_batch(self):
         if self.get('num_train_batch'):
             return self.get('num_train_batch')
+        print(self._calculate_batch_epoch_num(mode='train'))
         
         return self._calculate_batch_epoch_num(mode='train')[0] #일반적인 epoch당 batch 개수. batch 버전에서는 기존과 iteration 수의 min으로 지정.
 
@@ -360,96 +361,48 @@ class Context(LifecycleDict): #LifecycleDict를 상속받아 모델, 설정(cfg)
             return self.get('num_test_epoch')
         return self._calculate_batch_epoch_num(mode='test')[2]
 
-    # def _calculate_batch_epoch_num(self, mode='train'):#“local update step” 수, “gradient accumulation” 수, “batch_or_epoch” 설정을 반영. 리턴값은 (한 에폭 배치 수, 마지막 에폭 배치 수, 에폭 수, 전체 배치 수)
-    #     #Val/Test: 에폭 수 고정 1, 배치 수만 데이터 크기 기준으로 계산. num_batch_last_epoch, num_total_batch = None, None으로 된다.
-    #     # 1) 사용할 split 결정
-    #     if self.cur_split is None:
-    #         logger.warning(
-    #             f'cur_split `{self.cur_split}` not found in data_split, '
-    #             f'will use `train` split to calculate `ctx.var`.')
-    #         cur_split = 'train'
-    #     else:
-    #         cur_split = self.cur_split
+    def _calculate_batch_epoch_num(self, mode='train'):#“local update step” 수, “gradient accumulation” 수, “batch_or_epoch” 설정을 반영. 리턴값은 (한 에폭 배치 수, 마지막 에폭 배치 수, 에폭 수, 전체 배치 수)
+        #Val/Test: 에폭 수 고정 1, 배치 수만 데이터 크기 기준으로 계산. num_batch_last_epoch, num_total_batch = None, None으로 된다.
+        # 1) 사용할 split 결정
+        if self.cur_split is None:
+            logger.warning(
+                f'cur_split `{self.cur_split}` not found in data_split, '
+                f'will use `train` split to calculate `ctx.var`.')
+            cur_split = 'train'
+        else:
+            cur_split = self.cur_split
 
-    #     num_batch_last_epoch, num_total_batch = None, None
+        num_batch_last_epoch, num_total_batch = None, None
 
-    #     #2) train/finetune 모드인 경우. 여기서의 batch size는 micro batch size의미.
-    #     if mode in ['train', 'finetune']: #self.cfg.grad.grad_accum_count 이거는 언제나 1인듯.
-    #         #self.get(f'num_{cur_split}_data')는 torch_trainer.py의 parse_data()로부터 계산되어서 쪼개지기 전 dataset 자체의 순수 갯수임. ddp의 sharding 이랑 무관. 합쳐진 전부의 갯수.
+        #2) train/finetune 모드인 경우. 여기서의 batch size는 micro batch size의미.
+        if mode in ['train', 'finetune']: #self.cfg.grad.grad_accum_count 이거는 언제나 1인듯.
+            #self.get(f'num_{cur_split}_data')는 torch_trainer.py의 parse_data()로부터 계산되어서 쪼개지기 전 dataset 자체의 순수 갯수임. ddp의 sharding 이랑 무관. 합쳐진 전부의 갯수.
  
-    #         num_batch, num_batch_last_epoch, num_epoch, num_total_batch = \
-    #             calculate_batch_epoch_num(
-    #                 self.cfg.train.local_update_steps *
-    #                 self.cfg.grad.grad_accum_count,
-    #                 self.cfg.train.batch_or_epoch,
-    #                 self.get(f'num_{cur_split}_data'),
-    #                 self.cfg.dataloader.batch_size,
-    #                 self.cfg.dataloader.drop_last)# (num_batch_per_epoch, num_batch_last_epoch, num_epoch, num_total_batch)를 반환, num_batch_last_epoch는 마지막 epoch에서 iteration 수
-    #         #100 batch 7916 2 False
-    #         # print(self.cfg.train.local_update_steps *self.cfg.grad.grad_accum_count, self.cfg.train.batch_or_epoch, self.get(f'num_{cur_split}_data'), self.cfg.dataloader.batch_size, self.cfg.dataloader.drop_last)
-    #         #(100, 100, 1, 100)
-    #         # print(num_batch, num_batch_last_epoch, num_epoch, num_total_batch) 
+            num_batch, num_batch_last_epoch, num_epoch, num_total_batch = \
+                calculate_batch_epoch_num(
+                    self.cfg.train.local_update_steps *
+                    self.cfg.grad.grad_accum_count,
+                    self.cfg.train.batch_or_epoch,
+                    self.get(f'num_{cur_split}_data'),
+                    self.cfg.dataloader.batch_size,
+                    self.cfg.dataloader.drop_last)# (num_batch_per_epoch, num_batch_last_epoch, num_epoch, num_total_batch)를 반환, num_batch_last_epoch는 마지막 epoch에서 iteration 수
+            #100 batch 7916 2 False
+            # print(self.cfg.train.local_update_steps *self.cfg.grad.grad_accum_count, self.cfg.train.batch_or_epoch, self.get(f'num_{cur_split}_data'), self.cfg.dataloader.batch_size, self.cfg.dataloader.drop_last)
+            #(100, 100, 1, 100)
+            # print(num_batch, num_batch_last_epoch, num_epoch, num_total_batch) 
 
-    #     # 3) val/test 모드인 경우
-    #     elif mode in ['val', 'test']: #num_batch_last_epoch, num_total_batch = None, None로 반환.
-    #         num_epoch = 1
-    #         # 전체 데이터 크기 나누기 배치 사이즈 (+ drop_last 여부). 한 epoch 돌 동안 전체 batch 수.
-    #         num_batch = self.get(f'num_{cur_split}_data') // self.cfg.dataloader.batch_size + int(not self.cfg.dataloader.drop_last and bool(self.get(f'num_{cur_split}_data') % self.cfg.dataloader.batch_size))
-    #     else:
-    #         raise ValueError(f'Invalid mode {mode}.')
-        
-
-
-        
-    #     return num_batch, num_batch_last_epoch, num_epoch, num_total_batch
-
-    def _calculate_batch_epoch_num(self, mode='train'):
-        # 0) mode -> split 매핑 (cur_split에 의존 X)
-        if mode in ('train', 'finetune'):
-            split = 'train'
-        elif mode in ('val', 'test'):
-            split = mode
+        # 3) val/test 모드인 경우
+        elif mode in ['val', 'test']: #num_batch_last_epoch, num_total_batch = None, None로 반환.
+            num_epoch = 1
+            # 전체 데이터 크기 나누기 배치 사이즈 (+ drop_last 여부). 한 epoch 돌 동안 전체 batch 수.
+            num_batch = self.get(f'num_{cur_split}_data') // self.cfg.dataloader.batch_size + int(not self.cfg.dataloader.drop_last and bool(self.get(f'num_{cur_split}_data') % self.cfg.dataloader.batch_size))
         else:
             raise ValueError(f'Invalid mode {mode}.')
-
-        # 공통 입력값
-        data_size = int(self.get(f'num_{split}_data'))
-        bs        = int(self.cfg.dataloader.batch_size)
-        drop_last = bool(self.cfg.dataloader.drop_last)
-
-        if mode in ('train', 'finetune'):
-            lus = int(self.cfg.train.local_update_steps)
-            gac = int(self.cfg.grad.grad_accum_count)
-
-            num_batch, num_batch_last_epoch, num_epoch, num_total_batch = calculate_batch_epoch_num(
-                lus * gac,
-                self.cfg.train.batch_or_epoch,
-                data_size,
-                bs,
-                drop_last
-            )
-
-            # ✅ DEBUG 레벨 로깅 (필요할 때만 켜세요)
-            logger.info(
-                "[calc/train] split=%s size=%d bs=%d drop_last=%s lus=%d gac=%d "
-                "=> num_batch=%d, last_epoch=%s, num_epoch=%d, total=%s",
-                split, data_size, bs, drop_last, lus, gac,
-                num_batch, str(num_batch_last_epoch), num_epoch, str(num_total_batch)
-            )
-            return num_batch, num_batch_last_epoch, num_epoch, num_total_batch
-
-        else:  # val/test
-            num_epoch = 1
-            num_batch = data_size // bs + int(not drop_last and bool(data_size % bs))
-
-            logger.info(
-                "[calc/%s] split=%s size=%d bs=%d drop_last=%s => num_batch=%d, num_epoch=%d",
-                mode, split, data_size, bs, drop_last, num_batch, num_epoch
-            )
-            return num_batch, None, num_epoch, None
+        
 
 
-
+        
+        return num_batch, num_batch_last_epoch, num_epoch, num_total_batch
 
     def track_mode(self, mode): # 지금부터 “mode” (훈련인지 평가인지) 를 바꾼다고 스택에 기록하고, cur_mode 에 반영한 뒤, 실제 모델을 .train() 또는 .eval() 상태로 전환합니다.
         self.mode_stack.append(mode)

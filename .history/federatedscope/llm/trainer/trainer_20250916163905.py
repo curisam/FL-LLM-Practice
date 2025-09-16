@@ -1471,30 +1471,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                     with open(per_client_path, "a", encoding="utf-8") as f:
                         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-                # ⬇️ ES는 test일 때(그리고 CT-FT일 때)만 수행
-                if self._ct_ft and sp == 'test' and self._es_enabled and isinstance(out, dict):
-                    # acc 키를 견고하게 가져오기 (우선순위: test_acc -> f'{sp}_acc' -> acc)
-                    cur_acc = float(out['test_acc'])  # 여기 고정!
-
-                    if cur_acc > (self._es_best + self._es_min_delta):
-                        self._es_best = cur_acc
-                        self._es_wait = 0
-                        if is_main:
-                            logger.info(f"[EarlyStop] new best test_acc={cur_acc:.6f}")
-                    else:
-                        self._es_wait += 1
-                        if is_main:
-                            logger.info(f"[EarlyStop] no improvement (wait={self._es_wait}/{self._es_patience}), "
-                                        f"best={self._es_best:.6f}, curr={cur_acc:.6f}")
-                        if self._es_wait >= self._es_patience:
-                            self._es_triggered = True
-                            if is_main:
-                                logger.info("[EarlyStop] patience reached -> request stop")
-
-                # 마지막에 카운터 리셋
                 self._reset_split_counters(sp)
-
-
 
             if using_accel:
                 self.accelerator.wait_for_everyone()

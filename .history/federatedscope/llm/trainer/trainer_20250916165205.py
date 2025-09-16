@@ -1496,6 +1496,8 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
 
 
+                self._reset_split_counters(sp)
+
             if using_accel:
                 self.accelerator.wait_for_everyone()
             # ====== ⬆ 기존 본문 그대로 둠 ======

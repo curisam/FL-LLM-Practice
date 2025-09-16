@@ -185,17 +185,15 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         self._mid_eval_every = int(getattr(self.cfg.eval, "every_n_train_steps", -1)) if self._ct_ft else -1
         self._global_updates = 0
 
-        # ⬇️ Early-Stop 상태값 (CT-FT일 때만 유효)
-        self._es_enabled   = self._ct_ft and bool(getattr(self.cfg.eval, "early_stop_on_test_acc", True))
-        self._es_patience  = int(getattr(self.cfg.eval, "early_stop_patience", 10))
-        self._es_min_delta = float(getattr(self.cfg.eval, "early_stop_min_delta", 0.0))
-        self._es_best      = float("-inf")
-        self._es_wait      = 0
-        self._es_triggered = False
+        # ★ 윈도우 계산을 위한 '직전 누적' 스냅샷
+        self._train_cum_prev = {"total": 0, "loss": 0.0, "seen": 0, "correct": 0}
 
+        # ★ 설정: 윈도우(True) vs 누적(False) — 기본 True 권장
+        self._mid_train_window = bool(getattr(self.cfg.eval, "mid_train_window", True))     
 
         self._mid_eval_pending = False   
         self._mid_eval_running = False
+
 
         self._epoch_i_cache_for_train_loop = 0
         self._num_epoch_cache_for_train_loop = 1
@@ -519,7 +517,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
         if self.ctx.cur_mode in [MODE.TRAIN, MODE.FINETUNE]:
             if run_step == -1: #train 떄 일반적으로 이것에 걸림.
-                num_batches = getattr(self.ctx, f"num_{split}_batch") ##sharding 고려하지 않고 일반적인 epoch당 micro batch 기준 총  batch 개수. 다만 batch_or_epoch == "batch"이면 iteration 수와 비교했을 때 min 값으로 설정됨.
+                num_batches = getattr(self.ctx, f"num_{split}_batch") ##일반적인 epoch당 batch 개수. 다만 batch_or_epoch == "batch"이면 iteration 수와 비교했을 때 min 값으로 설정됨.
 
                 logger.info(f"[run-batch-setup] split={split}, "
                             f"len(loader)={len(loader)}, num_batches(ctx)={num_batches}, "
@@ -1471,30 +1469,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                     with open(per_client_path, "a", encoding="utf-8") as f:
                         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-                # ⬇️ ES는 test일 때(그리고 CT-FT일 때)만 수행
-                if self._ct_ft and sp == 'test' and self._es_enabled and isinstance(out, dict):
-                    # acc 키를 견고하게 가져오기 (우선순위: test_acc -> f'{sp}_acc' -> acc)
-                    cur_acc = float(out['test_acc'])  # 여기 고정!
-
-                    if cur_acc > (self._es_best + self._es_min_delta):
-                        self._es_best = cur_acc
-                        self._es_wait = 0
-                        if is_main:
-                            logger.info(f"[EarlyStop] new best test_acc={cur_acc:.6f}")
-                    else:
-                        self._es_wait += 1
-                        if is_main:
-                            logger.info(f"[EarlyStop] no improvement (wait={self._es_wait}/{self._es_patience}), "
-                                        f"best={self._es_best:.6f}, curr={cur_acc:.6f}")
-                        if self._es_wait >= self._es_patience:
-                            self._es_triggered = True
-                            if is_main:
-                                logger.info("[EarlyStop] patience reached -> request stop")
-
-                # 마지막에 카운터 리셋
                 self._reset_split_counters(sp)
-
-
 
             if using_accel:
                 self.accelerator.wait_for_everyone()

@@ -1491,10 +1491,20 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                             if is_main:
                                 logger.info("[EarlyStop] patience reached -> request stop")
 
+                    # 멀티프로세스면 트리거 동기화
+                    if using_accel:
+                        import torch
+                        t = torch.tensor([1 if self._es_triggered else 0],
+                                        device=self.accelerator.device, dtype=torch.long)
+                        t = self.accelerator.reduce(t, reduction='max')
+                        self._es_triggered = bool(t.item())
+
                 # 마지막에 카운터 리셋
                 self._reset_split_counters(sp)
 
 
+
+                self._reset_split_counters(sp)
 
             if using_accel:
                 self.accelerator.wait_for_everyone()
