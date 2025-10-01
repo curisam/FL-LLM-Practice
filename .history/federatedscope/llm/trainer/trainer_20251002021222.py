@@ -410,7 +410,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         # ★ CT-FT & baseline 옵션이면, 파인튜닝 시작 전에 1회 평가
         if self._ct_ft and self._mid_eval_every > 0 and bool(getattr(self.cfg.eval, "baseline_before_ft", True)):
             self._mid_eval_once()  
-            # self._mid_eval_once_stat()  # ← 아래 새 구현이 label/prob만 추출
+            self._mid_eval_once_stat()  # ← 아래 새 구현이 label/prob만 추출
             if hasattr(self, "accelerator") and self.accelerator is not None:
                 self.accelerator.wait_for_everyone()
 

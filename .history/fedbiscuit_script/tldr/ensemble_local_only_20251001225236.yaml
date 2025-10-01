@@ -30,10 +30,8 @@ llm:
 dataloader:
   batch_size: 2
 model:
-  type: 'Qwen/Qwen2-0.5B@huggingface_llm'  
+  type: 'Qwen/Qwen2-0.5B@huggingface_llm'
   load_from_local_pretrained_model_path: 'checkpoints_1.0_local_only/local_only_ensemble.ckpt'  
-
-
 train:
   local_update_steps: 1 # 클라이언트당 optimizer step 기준 업데이트 횟수
   batch_or_epoch: batch

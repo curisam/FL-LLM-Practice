@@ -408,9 +408,9 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
 
         # ★ CT-FT & baseline 옵션이면, 파인튜닝 시작 전에 1회 평가
+        import ipdb; ipdb.set_trace(context=15)
         if self._ct_ft and self._mid_eval_every > 0 and bool(getattr(self.cfg.eval, "baseline_before_ft", True)):
-            self._mid_eval_once()  
-            # self._mid_eval_once_stat()  # ← 아래 새 구현이 label/prob만 추출
+            self._mid_eval_once()  # ← 아래 새 구현이 label/prob만 추출
             if hasattr(self, "accelerator") and self.accelerator is not None:
                 self.accelerator.wait_for_everyone()
 
@@ -630,6 +630,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                         hook(self.ctx)
 
                 # ← 여기! 한 배치의 라이프사이클이 끝난 안전 지점
+                import ipdb; ipdb.set_trace(context=15)
                 if self.ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and self._mid_eval_pending:
                     self._mid_eval_pending = False
                     self._mid_eval_once()
@@ -666,6 +667,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                     for hook in hooks_set["on_batch_end"]:
                         hook(self.ctx)
                 # ← 여기! 누적이 끝나 optimizer.step()가 발생했을 때만 플래그가 켜짐
+                import ipdb; ipdb.set_trace(context=15)
                 if self.ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and self._mid_eval_pending:
                     self._mid_eval_pending = False
                     self._mid_eval_once()
@@ -1224,6 +1226,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         #     pred = torch.argmax(ctx.y_prob, dim=-1)
         #     ctx.ys_true.append(ctx.y_true)
         #     ctx.ys_pred.append(pred)
+        import ipdb; ipdb.set_trace(context=15)
         if ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and getattr(self, "_mid_eval_pending", False):
             logger.info(f"[MID-EVAL-TRIGGER] at optimizer_step={self._global_updates}")
             self._mid_eval_pending = False
@@ -1448,7 +1451,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         torch.save(sd, save_path)
         logger.info(f"[local-only] saved(best) -> {save_path}")
 
-    def _mid_eval_once_stat(self):
+    def _mid_eval_once(self):
         """
         (간소화, Accelerate process=1 가정)
         - test 로더를 강제 재빌드 후 즉시 사용
@@ -1555,142 +1558,142 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
             self.accelerator.wait_for_everyone()
 
 
-    def _mid_eval_once(self):
-        """CT-FT에서 every_n_train_steps마다:
-        (1) train 스냅샷 -> 전 클라이언트 공용 파일에 append
-        (2) train 카운터 초기화
-        (3) val/test 평가 -> 클라이언트별 파일에 append
-        (4) val/test 카운터 초기화
-        """
+    # def _mid_eval_once(self):
+    #     """CT-FT에서 every_n_train_steps마다:
+    #     (1) train 스냅샷 -> 전 클라이언트 공용 파일에 append
+    #     (2) train 카운터 초기화
+    #     (3) val/test 평가 -> 클라이언트별 파일에 append
+    #     (4) val/test 카운터 초기화
+    #     """
  
-        # --- 재진입 가드 ---
-        if getattr(self, "_mid_eval_running", False):
-            return
-        self._mid_eval_running = True
+    #     # --- 재진입 가드 ---
+    #     if getattr(self, "_mid_eval_running", False):
+    #         return
+    #     self._mid_eval_running = True
 
-        # --- 호출 전 상태 저장 ---
-        prev_mode = getattr(self.ctx, "cur_mode", None)
-        prev_split = getattr(self.ctx, "cur_split", None)   # ★ 추가
-        prev_training = None
-        m = getattr(self.ctx, "model", None)
-        if m is not None:
-            try:
-                prev_training = self._unwrap(m).training  # HF/Accelerate 래핑 고려
-            except Exception:
-                prev_training = m.training
+    #     # --- 호출 전 상태 저장 ---
+    #     prev_mode = getattr(self.ctx, "cur_mode", None)
+    #     prev_split = getattr(self.ctx, "cur_split", None)   # ★ 추가
+    #     prev_training = None
+    #     m = getattr(self.ctx, "model", None)
+    #     if m is not None:
+    #         try:
+    #             prev_training = self._unwrap(m).training  # HF/Accelerate 래핑 고려
+    #         except Exception:
+    #             prev_training = m.training
 
-        try:
-            # ====== ⬇ 기존 본문 그대로 둠 (아래 줄부터 네 코드) ======
-            using_accel = hasattr(self, 'accelerator') and self.accelerator is not None
-            if using_accel:
-                self.accelerator.wait_for_everyone()
-            is_main = (not using_accel) or self.accelerator.is_main_process
+    #     try:
+    #         # ====== ⬇ 기존 본문 그대로 둠 (아래 줄부터 네 코드) ======
+    #         using_accel = hasattr(self, 'accelerator') and self.accelerator is not None
+    #         if using_accel:
+    #             self.accelerator.wait_for_everyone()
+    #         is_main = (not using_accel) or self.accelerator.is_main_process
 
-            cid  = int(getattr(getattr(self, "ctx", object()), "client_ID", 0))
-            rnd  = int(getattr(getattr(self, "ctx", object()), "round", 0))
-            step = int(getattr(self, "_global_updates", 0))
-            adapter_idx = getattr(getattr(self, "ctx", object()), "current_adapter_idx", None)
+    #         cid  = int(getattr(getattr(self, "ctx", object()), "client_ID", 0))
+    #         rnd  = int(getattr(getattr(self, "ctx", object()), "round", 0))
+    #         step = int(getattr(self, "_global_updates", 0))
+    #         adapter_idx = getattr(getattr(self, "ctx", object()), "current_adapter_idx", None)
 
-            outdir = getattr(self.cfg.eval, "outdir", "runs")
-            os.makedirs(outdir, exist_ok=True)
-            train_path = os.path.join(outdir, "train_results.raw")
-            per_client_path = os.path.join(outdir, f"mid_eval/client_{cid:03d}.raw")
-            os.makedirs(os.path.dirname(per_client_path), exist_ok=True)
+    #         outdir = getattr(self.cfg.eval, "outdir", "runs")
+    #         os.makedirs(outdir, exist_ok=True)
+    #         train_path = os.path.join(outdir, "train_results.raw")
+    #         per_client_path = os.path.join(outdir, f"mid_eval/client_{cid:03d}.raw")
+    #         os.makedirs(os.path.dirname(per_client_path), exist_ok=True)
 
-            logger.info(f"[mid-eval] start: is_main={is_main}, step={step}, splits={['val','test']}")
+    #         logger.info(f"[mid-eval] start: is_main={is_main}, step={step}, splits={['val','test']}")
 
-            train_snap = self._train_snapshot_metrics()
-            if not train_snap:
-                train_snap = {
-                    "train_total": 0, "train_loss": 0.0, "train_avg_loss": 0.0,
-                    "train_seen": 0, "train_correct": 0, "train_acc": 0.0,
-                }
+    #         train_snap = self._train_snapshot_metrics()
+    #         if not train_snap:
+    #             train_snap = {
+    #                 "train_total": 0, "train_loss": 0.0, "train_avg_loss": 0.0,
+    #                 "train_seen": 0, "train_correct": 0, "train_acc": 0.0,
+    #             }
 
-            if is_main:
-                rec = {
-                    "client": cid, "round": rnd, "step": step,
-                    "phase": "mid", "split": "train",
-                    "adapter_idx": (int(adapter_idx) if adapter_idx is not None else None),
-                    "total": train_snap.get("train_total", 0),
-                    "loss": train_snap.get("train_loss", 0.0),
-                    "avg_loss": train_snap.get("train_avg_loss", 0.0),
-                    "seen": train_snap.get("train_seen", 0),
-                    "correct": train_snap.get("train_correct", 0),
-                    "acc": train_snap.get("train_acc", 0.0),
-                }
-                with open(train_path, "a", encoding="utf-8") as f:
-                    f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    #         if is_main:
+    #             rec = {
+    #                 "client": cid, "round": rnd, "step": step,
+    #                 "phase": "mid", "split": "train",
+    #                 "adapter_idx": (int(adapter_idx) if adapter_idx is not None else None),
+    #                 "total": train_snap.get("train_total", 0),
+    #                 "loss": train_snap.get("train_loss", 0.0),
+    #                 "avg_loss": train_snap.get("train_avg_loss", 0.0),
+    #                 "seen": train_snap.get("train_seen", 0),
+    #                 "correct": train_snap.get("train_correct", 0),
+    #                 "acc": train_snap.get("train_acc", 0.0),
+    #             }
+    #             with open(train_path, "a", encoding="utf-8") as f:
+    #                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-            self._reset_split_counters('train')
-            if using_accel:
-                self.accelerator.wait_for_everyone()
+    #         self._reset_split_counters('train')
+    #         if using_accel:
+    #             self.accelerator.wait_for_everyone()
 
-            for sp in ['val','test']:
-                self._reset_split_counters(sp)
-                if using_accel:
-                    self.accelerator.wait_for_everyone()
+    #         for sp in ['val','test']:
+    #             self._reset_split_counters(sp)
+    #             if using_accel:
+    #                 self.accelerator.wait_for_everyone()
 
-                out = self.evaluate(target_data_split_name=sp)
+    #             out = self.evaluate(target_data_split_name=sp)
 
-                if is_main and isinstance(out, dict):
-                    rec = {
-                        "client": cid, "round": rnd, "step": step,
-                        "phase": "mid", "split": sp,
-                        "adapter_idx": (int(adapter_idx) if adapter_idx is not None else None),
-                        "total":    out.get(f"{sp}_total", 0),
-                        "loss":     out.get(f"{sp}_loss", 0.0),
-                        "avg_loss": out.get(f"{sp}_avg_loss", 0.0),
-                        "seen":     out.get(f"{sp}_seen", 0),
-                        "correct":  out.get(f"{sp}_correct", 0),
-                        "acc":      out.get(f"{sp}_acc", 0.0),
-                    }
-                    with open(per_client_path, "a", encoding="utf-8") as f:
-                        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    #             if is_main and isinstance(out, dict):
+    #                 rec = {
+    #                     "client": cid, "round": rnd, "step": step,
+    #                     "phase": "mid", "split": sp,
+    #                     "adapter_idx": (int(adapter_idx) if adapter_idx is not None else None),
+    #                     "total":    out.get(f"{sp}_total", 0),
+    #                     "loss":     out.get(f"{sp}_loss", 0.0),
+    #                     "avg_loss": out.get(f"{sp}_avg_loss", 0.0),
+    #                     "seen":     out.get(f"{sp}_seen", 0),
+    #                     "correct":  out.get(f"{sp}_correct", 0),
+    #                     "acc":      out.get(f"{sp}_acc", 0.0),
+    #                 }
+    #                 with open(per_client_path, "a", encoding="utf-8") as f:
+    #                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-                # ⬇️ ES는 test일 때(그리고 CT-FT일 때)만 수행
-                if self._ct_ft and sp == 'test' and self._es_enabled and isinstance(out, dict):
-                    # acc 키를 견고하게 가져오기 (우선순위: test_acc -> f'{sp}_acc' -> acc)
-                    cur_acc = float(out['test_acc'])  # 여기 고정!
+    #             # ⬇️ ES는 test일 때(그리고 CT-FT일 때)만 수행
+    #             if self._ct_ft and sp == 'test' and self._es_enabled and isinstance(out, dict):
+    #                 # acc 키를 견고하게 가져오기 (우선순위: test_acc -> f'{sp}_acc' -> acc)
+    #                 cur_acc = float(out['test_acc'])  # 여기 고정!
 
-                    if cur_acc > (self._es_best + self._es_min_delta):
-                        self._es_best = cur_acc
-                        self._es_wait = 0
-                        if is_main:
-                            logger.info(f"[EarlyStop] new best test_acc={cur_acc:.6f}")
-                        self._save_best_local_only()
-                    else:
-                        self._es_wait += 1
-                        if is_main:
-                            logger.info(f"[EarlyStop] no improvement (wait={self._es_wait}/{self._es_patience}), "
-                                        f"best={self._es_best:.6f}, curr={cur_acc:.6f}")
-                        if self._es_wait >= self._es_patience:
-                            self._es_triggered = True
-                            if is_main:
-                                logger.info("[EarlyStop] patience reached -> request stop")
+    #                 if cur_acc > (self._es_best + self._es_min_delta):
+    #                     self._es_best = cur_acc
+    #                     self._es_wait = 0
+    #                     if is_main:
+    #                         logger.info(f"[EarlyStop] new best test_acc={cur_acc:.6f}")
+    #                     self._save_best_local_only()
+    #                 else:
+    #                     self._es_wait += 1
+    #                     if is_main:
+    #                         logger.info(f"[EarlyStop] no improvement (wait={self._es_wait}/{self._es_patience}), "
+    #                                     f"best={self._es_best:.6f}, curr={cur_acc:.6f}")
+    #                     if self._es_wait >= self._es_patience:
+    #                         self._es_triggered = True
+    #                         if is_main:
+    #                             logger.info("[EarlyStop] patience reached -> request stop")
 
-                # 마지막에 카운터 리셋
-                self._reset_split_counters(sp)
+    #             # 마지막에 카운터 리셋
+    #             self._reset_split_counters(sp)
 
 
 
-            if using_accel:
-                self.accelerator.wait_for_everyone()
-            # ====== ⬆ 기존 본문 그대로 둠 ======
+    #         if using_accel:
+    #             self.accelerator.wait_for_everyone()
+    #         # ====== ⬆ 기존 본문 그대로 둠 ======
 
-        finally:
-            # --- 상태 복구 ---
-            if prev_mode is not None:
-                self.ctx.cur_mode = prev_mode
-            if prev_split is not None:
-                self.ctx.cur_split = prev_split            # ★ 추가
+    #     finally:
+    #         # --- 상태 복구 ---
+    #         if prev_mode is not None:
+    #             self.ctx.cur_mode = prev_mode
+    #         if prev_split is not None:
+    #             self.ctx.cur_split = prev_split            # ★ 추가
 
-            m = getattr(self.ctx, "model", None)
-            if m is not None:
-                if prev_training:
-                    m.train()
-                else:
-                    m.eval()
-            self._mid_eval_running = False
+    #         m = getattr(self.ctx, "model", None)
+    #         if m is not None:
+    #             if prev_training:
+    #                 m.train()
+    #             else:
+    #                 m.eval()
+    #         self._mid_eval_running = False
 
     def _reset_split_counters(self, split: str):
         """해당 split의 누적 카운터를 0으로 초기화."""

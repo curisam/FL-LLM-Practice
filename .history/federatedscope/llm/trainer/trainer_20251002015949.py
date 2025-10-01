@@ -408,9 +408,10 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
 
 
         # ★ CT-FT & baseline 옵션이면, 파인튜닝 시작 전에 1회 평가
+        import ipdb; ipdb.set_trace(context=15)
         if self._ct_ft and self._mid_eval_every > 0 and bool(getattr(self.cfg.eval, "baseline_before_ft", True)):
+            self._mid_eval_once_stat()  # ← 아래 새 구현이 label/prob만 추출
             self._mid_eval_once()  
-            # self._mid_eval_once_stat()  # ← 아래 새 구현이 label/prob만 추출
             if hasattr(self, "accelerator") and self.accelerator is not None:
                 self.accelerator.wait_for_everyone()
 
@@ -630,6 +631,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                         hook(self.ctx)
 
                 # ← 여기! 한 배치의 라이프사이클이 끝난 안전 지점
+                import ipdb; ipdb.set_trace(context=15)
                 if self.ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and self._mid_eval_pending:
                     self._mid_eval_pending = False
                     self._mid_eval_once()
@@ -666,6 +668,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
                     for hook in hooks_set["on_batch_end"]:
                         hook(self.ctx)
                 # ← 여기! 누적이 끝나 optimizer.step()가 발생했을 때만 플래그가 켜짐
+                import ipdb; ipdb.set_trace(context=15)
                 if self.ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and self._mid_eval_pending:
                     self._mid_eval_pending = False
                     self._mid_eval_once()
@@ -1224,6 +1227,7 @@ class LLMTrainer(GeneralTorchTrainer): #**Large Language Model (LLM)**을 학습
         #     pred = torch.argmax(ctx.y_prob, dim=-1)
         #     ctx.ys_true.append(ctx.y_true)
         #     ctx.ys_pred.append(pred)
+        import ipdb; ipdb.set_trace(context=15)
         if ctx.cur_mode in (MODE.TRAIN, MODE.FINETUNE) and getattr(self, "_mid_eval_pending", False):
             logger.info(f"[MID-EVAL-TRIGGER] at optimizer_step={self._global_updates}")
             self._mid_eval_pending = False

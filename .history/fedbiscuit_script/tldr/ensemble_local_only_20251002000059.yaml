@@ -31,7 +31,8 @@ dataloader:
   batch_size: 2
 model:
   type: 'Qwen/Qwen2-0.5B@huggingface_llm'  
-  load_from_local_pretrained_model_path: 'checkpoints_1.0_local_only/local_only_ensemble.ckpt'  
+  load_from_local_pretrained_model_path: 'checkpoints_1.0_local_only/local_only_tldr_choice_qwen_client_003.ckpt'
+  # load_from_local_pretrained_model_path: 'checkpoints_1.0_local_only/local_only_ensemble.ckpt'  
 
 
 train:

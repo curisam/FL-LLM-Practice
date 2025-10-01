@@ -173,6 +173,7 @@ def get_llm(config, load_from_prev_ckpt=False, **kwargs):
     # 2) ckpt 불러와 그대로 로드 (여분 어댑터는 자동 무시)
     ckpt_path = getattr(model_config, "load_from_local_pretrained_model_path", None)  
 
+    import ipdb; ipdb.set_trace(context=15)
 
     if ckpt_path:
         ckpt = torch.load(ckpt_path, map_location="cpu")
