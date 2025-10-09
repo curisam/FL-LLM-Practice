@@ -124,7 +124,7 @@ class LLMMultiLoRAClient(Client):
         self.state = round
 
 
-        if getattr(self._cfg.federate, 'sampler', 'uniform') == 'cluster' or getattr(self._cfg.llm.adapter.cluster_runtime, 'scheduled_file', '') != '' :
+        if getattr(self._cfg.federate, 'sampler', 'uniform') == 'cluster' or getattr(self._cfg.llm.adaptercluster_runtime, 'scheduled_file', '') != '' :
             # This is client-wise
             self.model.set_active_adapter(f'Adapter_{self.adapter_idx}')
             adapter_idx = self.adapter_idx

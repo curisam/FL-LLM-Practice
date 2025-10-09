@@ -39,14 +39,6 @@ class LLMMultiLoRAServer(Server):
         if getattr(self._cfg.federate, 'sampler', 'uniform') == 'cluster' and int(self._cfg.llm.adapter.count) > 1:
             self._init_fixed_cluster_grouping()
 
-        has_schedule = bool(getattr(self._cfg.llm.adapter, 'cluster_runtime', None) and \
-                            'schedule_file' in self._cfg.llm.adapter.cluster_runtime)
-        has_clusters = hasattr(self._cfg.llm.adapter, 'clusters')
-
-        if int(self._cfg.llm.adapter.count) > 1 and (has_schedule or has_clusters):
-            self._init_fixed_cluster_grouping()
-
-
 
         if self._cfg.llm.adapter.count > 1: #True
             # self.aggregator.total_train_size = len(data.train_data) #모든 client들의 train data 갯수 총합. 

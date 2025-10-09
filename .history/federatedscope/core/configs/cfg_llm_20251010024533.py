@@ -102,7 +102,7 @@ def extend_llm_cfg(cfg):
     cfg.llm.adapter.grouping.round = 50
     cfg.llm.adapter.balance = True
     cfg.llm.adapter.cluster_runtime = CN()
-    cfg.llm.adapter.cluster_runtime.scheduled_file = ''
+    cfg.llm.adapter.cluster_runtime.scheduled_file = None
 
     # ---------------------------------------------------------------------- #
     # Offsite-tuning related options

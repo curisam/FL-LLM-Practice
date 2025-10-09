@@ -8,7 +8,7 @@ federate:
   client_num: 53
   sample_client_num: 5
   total_round_num: 0
-  save_to: "checkpoints_1.0_oracle/tldr_choice_qwen_fedbis_oracle_u3.ckpt"
+  save_to: "checkpoints_1.0_oracle/tldr_choice_qwen_fedbis_oracle_u7.ckpt"
   ignore_weight: True
   save_freq: 100
   share_local_model: True
@@ -26,8 +26,8 @@ llm:
     max_len: 1024
   adapter:
     use: True
-    count: 3
-    clusters_file: fedbiscuit_script/tldr/clusters_u3_53.json
+    count: 7
+    clusters_file: fedbiscuit_script/tldr/clusters_u7_53.json
     round_budget: 200
     target_per_round: 5
     warmup:
@@ -66,5 +66,5 @@ eval:
   metrics: ['loss', 'acc']
   best_res_update_round_wise_key: test_loss
   count_flops: False
-outdir: exp/tldr/choice_qwen/gfl/fedbis_oracle_u3_1.0
+outdir: exp/tldr/choice_qwen/gfl/fedbis_oracle_u7_1.0
 expname: ""

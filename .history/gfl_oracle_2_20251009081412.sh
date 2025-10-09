@@ -30,13 +30,13 @@ export FS_LOG_SUMMARY_ALL_RANKS=1
 export TRANSFORMERS_VERBOSITY=error
 
 # ---- 사용자 설정(필요시 수정)
-GPU_LIST="${GPU_LIST:-0,1,2,3}"
-ACCEL_CFG="fedbiscuit_script/accelerator_config_bf16_ver1.yaml"
-MAIN_PORT="${MAIN_PORT:-29500}"
+GPU_LIST="${GPU_LIST:-4,5,6,7}"
+ACCEL_CFG="fedbiscuit_script/accelerator_config_bf16_ver2.yaml"
+MAIN_PORT="${MAIN_PORT:-29501}"
 APP_MAIN="federatedscope/main.py"
 
-CFG1="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u3_1.0.yaml"
-CFG2="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u5_1.0.yaml"
+# CFG1="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u9_1.0.yaml"
+CFG2="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u7_1.0.yaml"
 
 
 LOG_DIR="${LOG_DIR:-runs_logs}"

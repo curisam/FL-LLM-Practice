@@ -16,7 +16,7 @@ export NCCL_DEBUG=INFO
 export TORCH_SHOW_CPP_STACKTRACES=1
 
 # ---- CUDA 할당자(파편화 완화)
-export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:256
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True,max_split_size_mb:256
 
 # ---- CPU 스레드 억제(랭크간 지터 감소)
 export OMP_NUM_THREADS=1
@@ -35,8 +35,7 @@ ACCEL_CFG="fedbiscuit_script/accelerator_config_bf16_ver1.yaml"
 MAIN_PORT="${MAIN_PORT:-29500}"
 APP_MAIN="federatedscope/main.py"
 
-CFG1="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u3_1.0.yaml"
-CFG2="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u5_1.0.yaml"
+CFG1="fedbiscuit_script/tldr/finetune_fedbis_oracle_u3_plain.yaml"
 
 
 LOG_DIR="${LOG_DIR:-runs_logs}"
@@ -61,6 +60,7 @@ run_one () {
 # ---- 순차 실행
 run_one "$CFG1"
 # run_one "$CFG2"
-
+# run_one "$CFG3"
+# run_one "$CFG4"
 
 echo "=== ALL DONE."

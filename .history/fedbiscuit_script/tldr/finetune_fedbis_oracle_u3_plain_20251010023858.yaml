@@ -2,15 +2,13 @@ use_gpu: True
 device: 0
 early_stop:
   patience: 0
+
 federate:
   mode: standalone
-  sampler: cluster
   client_num: 53
-  sample_client_num: 5
-  total_round_num: 0
-  save_to: "checkpoints_1.0_oracle/tldr_choice_qwen_fedbis_oracle_u3.ckpt"
+  sample_client_num: -1         # ← 매 라운드 전 클라이언트 참여
+  total_round_num: 1 # CT-FT: 1라운드 파인튜닝
   ignore_weight: True
-  save_freq: 100
   share_local_model: True
   online_aggr: False
 data:
@@ -27,12 +25,8 @@ llm:
   adapter:
     use: True
     count: 3
-    clusters_file: fedbiscuit_script/tldr/clusters_u3_53.json
-    round_budget: 200
-    target_per_round: 5
-    warmup:
-      use: True
-      round: 0
+    cluster_runtime:
+      scheduled_file: 'exp/tldr/choice_qwen/gfl/fedbis_oracle_u3_1.0/cluster_schedule/cluster_schedule_u3.json'
     grouping:
       use: False
     args: [ { 'adapter_package': 'peft', 'adapter_method': 'lora', 'r': 8, 'lora_alpha': 16, 'lora_dropout': 0.05, target_modules: [ "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj" ] } ]
@@ -42,8 +36,9 @@ dataloader:
   batch_size: 2
 model:
   type: 'Qwen/Qwen2-0.5B@huggingface_llm'
+  load_from_local_pretrained_model_path: 'checkpoints_1.0_oracle/final_tldr_choice_qwen_fedbis_oracle_u3_round_201.ckpt'
 train:
-  local_update_steps: 30
+  local_update_steps: 100 # 클라이언트당 optimizer step 기준 업데이트 횟수
   batch_or_epoch: batch
   optimizer:
     # type: RMSprop
@@ -51,20 +46,24 @@ train:
     type: AdamW
     betas: (0.9, 0.95)
     lr: 0.00001
-  scheduler:
-    milestones: [75, 125]    # 75라운드, 125라운드에 감축
-    gamma: 1.0            # ×1.0씩 곱해 감축
-  is_enable_half: True
+  is_enable_half: True # bf16/half 사용 플래그(Accelerate가 처리)
+
 criterion:
   type: CrossEntropyLoss
+
 trainer:
   type: llmrewardchoicetrainer
   choices: ['A', 'B']
+
 eval:
-  freq: 500
   split: ['val', 'test']
   metrics: ['loss', 'acc']
-  best_res_update_round_wise_key: test_loss
   count_flops: False
-outdir: exp/tldr/choice_qwen/gfl/fedbis_oracle_u3_1.0
+  outdir: exp/tldr/choice_qwen/pfl/fedbis_oracle_u3_1.0//raw  # raw 로그 저장 루트
+  # CT-FT(1라운드)에서 mid-eval 스텝 단위로 기록 (train/eval 모두 raw로 남김)
+  every_n_train_steps: 10       # 10, 20, 30스텝에 mid-eval + train 스냅샷 기록
+  baseline_before_ft: True      # 파인튜닝 시작 전(step=0) 베이스라인 기록
+
+
+outdir: exp/tldr/choice_qwen/pfl/fedbis_oracle_u3_1.0/
 expname: ""

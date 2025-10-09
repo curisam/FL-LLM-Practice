@@ -32,7 +32,7 @@ export TRANSFORMERS_VERBOSITY=error
 # ---- 사용자 설정(필요시 수정)
 GPU_LIST="${GPU_LIST:-0,1,2,3}"
 ACCEL_CFG="fedbiscuit_script/accelerator_config_bf16_ver1.yaml"
-MAIN_PORT="${MAIN_PORT:-29500}"
+MAIN_PORT="${MAIN_PORT:-29501}"
 APP_MAIN="federatedscope/main.py"
 
 CFG1="fedbiscuit_script/tldr/tldr_choice_qwen_fedbis_oracle_u3_1.0.yaml"
@@ -60,7 +60,7 @@ run_one () {
 
 # ---- 순차 실행
 run_one "$CFG1"
-# run_one "$CFG2"
+run_one "$CFG2"
 
 
 echo "=== ALL DONE."

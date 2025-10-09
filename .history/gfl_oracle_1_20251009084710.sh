@@ -60,7 +60,7 @@ run_one () {
 
 # ---- 순차 실행
 run_one "$CFG1"
-# run_one "$CFG2"
+run_one "$CFG2"
 
 
 echo "=== ALL DONE."

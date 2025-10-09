@@ -45,13 +45,19 @@ def get_sampler(sample_strategy='uniform', client_num=None, client_info=None, bi
     elif sample_strategy == 'cluster':
         # cfg에서 직접 꺼내도 되고, schedule_file을 열어도 됩니다.
         adp = config.llm.adapter
+        if hasattr(adp, 'round_ends') and adp.round_ends:
+            clusters_1b = adp.clusters
+            round_ends  = adp.round_ends
+            s_per       = adp.sample_num_per_adapter
+        else:
+            import json
+            with open(adp.cluster_runtime['schedule_file'], 'r') as f:
+                info = json.load(f)
+            clusters_1b = info['clusters_1_based']
+            round_ends  = info['round_ends']          # ★
+            s_per       = info['sample_num_per_adapter']
 
-        clusters_1b = adp.clusters
-        round_ends  = adp.round_ends
-        s_per       = adp.sample_num_per_adapter
-
-
-
+        from federatedscope.core.sampler import ClusterUniformSampler
         return ClusterUniformSampler(
             client_num=client_num,
             clusters_1b=clusters_1b,
