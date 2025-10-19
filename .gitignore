@@ -1,6 +1,5 @@
 # ignore data & checkpoints
 data/
-exp/
 checkpoints/
 trash/
 federatedscope/trash/
