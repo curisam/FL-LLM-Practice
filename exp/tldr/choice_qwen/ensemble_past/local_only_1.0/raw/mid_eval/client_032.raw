@@ -1,0 +1,4 @@
+{"client": 32, "round": 0, "step": 0, "phase": "mid", "split": "val", "adapter_idx": null, "total": 112, "loss": 78.67989349365234, "avg_loss": 0.7024990490504673, "seen": 112, "correct": 56, "acc": 0.5}
+{"client": 32, "round": 0, "step": 0, "phase": "mid", "split": "test", "adapter_idx": null, "total": 40, "loss": 27.541913986206055, "avg_loss": 0.6885478496551514, "seen": 40, "correct": 21, "acc": 0.525}
+{"client": 32, "round": 0, "step": 10, "phase": "mid", "split": "val", "adapter_idx": null, "total": 112, "loss": 77.61549377441406, "avg_loss": 0.6929954801286969, "seen": 112, "correct": 57, "acc": 0.5089285714285714}
+{"client": 32, "round": 0, "step": 10, "phase": "mid", "split": "test", "adapter_idx": null, "total": 40, "loss": 27.62447738647461, "avg_loss": 0.6906119346618652, "seen": 40, "correct": 23, "acc": 0.575}
