@@ -1,0 +1,166 @@
+import copy
+import logging
+
+import torch
+from torch.utils.data import random_split, ConcatDataset, Subset
+
+import random
+import copy
+
+from federatedscope.core.message import Message
+from federatedscope.core.workers.client import Client
+from federatedscope.core.data import ClientData
+
+
+import os
+import pickle
+
+logger = logging.getLogger(__name__)
+
+
+
+class LLMMultiLoRAClient(Client):
+    """
+    Client implementation of
+    "Offsite-Tuning: Transfer Learning without Full Model" paper
+    """
+    def __init__(self,
+                 ID=-1,
+                 server_id=None,
+                 state=-1,
+                 config=None,
+                 data=None,
+                 model=None,
+                 device='cpu',
+                 strategy=None,
+                 *args,
+                 **kwargs):
+
+        super(LLMMultiLoRAClient,
+              self).__init__(ID, server_id, state, config, data, model, device,
+                             strategy, *args, **kwargs)    
+
+
+    def callback_funcs_for_model_para(self, message: Message):
+            round = message.state  # 서버가 보낸 라운드 번호
+            sender = message.sender  # 메시지를 보낸 주체(서버) ID
+            timestamp = message.timestamp  # 서버 시각
+            content = message.content  # 실제 모델 파라미터
+
+
+            if self._cfg.federate.process_num > 1:
+                for k, v in content.items():
+                    content[k] = v.to(self.device) 
+
+
+            self.trainer.update(content,
+                                strict=self._cfg.federate.share_local_model) # 서버에서 보낸 파라미터로 모델을 덮어씌웁니다.
+            self.state = round
+
+
+            #학습 시작 이전에 adapter 할당
+            # Two mode of multilora training: Client-wise and clustering
+            if self._cfg.llm.adapter.local_only:
+                # This is client-wise
+                self.model.set_active_adapter(f'Adapter_{self.ID}')
+                adapter_idx = self.ID
+            elif self._cfg.llm.adapter.count > 1: #3. “군집/선택” 모드:
+                # This is clustering
+                warmup_round = self._cfg.llm.adapter.warmup.round #25
+                total_warmup_round = warmup_round * self._cfg.llm.adapter.count #75
+
+                if self._cfg.llm.adapter.warmup.use and \
+                        self.state < total_warmup_round:
+                    # Initialization for all adapters
+                    adapter_idx = self.state // warmup_round #워밍업 라운드: adapter_idx = state // warmup_round로 0..(count-1) 순환 활성화.
+                elif self._cfg.llm.adapter.grouping.use: #True. 서버/외부에서 정해준 self.adapter_idx를 그대로 사용. GFL 과정 중에는  Warm-up 이후에는 일반적으로 이것.
+                    adapter_idx = self.adapter_idx
+                else: #서버에서 정해주지 않아서 val셋으로 각 어댑터를 평가해서 val_avg_loss가 가장 작은 어댑터 후보를 뽑고(동률이면 리스트에 모음), 그 중 랜덤으로 하나 선택.
+                    # select the adapter with min val loss
+
+                    with torch.no_grad():
+                        min_loss, adapter_indices = 10.0, []
+                        for i in range(self._cfg.llm.adapter.count):
+                            if len(self.data.val_data) == 0:
+                                adapter_indices.append(i)
+                                continue
+
+                            #self.trainer.ctx.model에서도 동시에 적용됨.
+                            self.model.set_active_adapter(f'Adapter_{i}') 
+                            self.model.eval()
+
+                            # ✅ (중요) 이번 라운드 train 전에 split 캐시 리셋 — 누적 방지
+                            self._reset_ctx_split_metrics('val)
+
+                            metrics = self.trainer.evaluate(
+                                target_data_split_name='val')
+                            
+                            logger.info(
+                                f'Adapter {i} with the results: {metrics}')
+                            
+                            if i == 0 or min_loss > metrics['val_avg_loss']:
+                                min_loss, adapter_indices = metrics[
+                                    'val_avg_loss'], [i]
+                                
+                            elif min_loss == metrics['val_avg_loss']:
+                                adapter_indices.append(i)
+
+                        logger.info(adapter_indices)
+                        adapter_idx = random.choice(adapter_indices)
+                # activate the selected adapter for further training
+                logger.info(
+                    f'Activate the adapter {adapter_idx} for training...')
+                self.model.set_active_adapter(f'Adapter_{adapter_idx}')
+                self.model.train()
+            else:
+                raise ValueError(
+                    'You should set llm.adapter.local_only to True '
+                    'or llm.adapter.count > 1')
+
+            #할당된 adapter로부터 학습.
+            # ✅ (중요) 이번 라운드 train 전에 split 캐시 리셋 — 누적 방지
+            self._reset_ctx_split_metrics('train')
+
+            sample_size, model_para_all, results = self.trainer.train() # 전체 train data 갯수, model_para_all (업데이트된 active adapter의 state_dict), split routine 돌며 집계된 results (num_total, loss, acc 등) 리턴
+
+            if self._cfg.federate.share_local_model and not \
+                    self._cfg.federate.online_aggr:
+                model_para_all = copy.deepcopy(model_para_all) # 안전하게 복사
+                model_para_all = {
+                    key: value
+                    for key, value in model_para_all.items()
+                    if f'Adapter_{adapter_idx}.' in key
+                } #Active adapter 정보인 Adapter_{adapter_idx}에 한한 것만 필터링.
+
+            # ✅ 1)랭크별 train result 로그 띄움 2)모들 랭크 종합한 train result 로그 띄움.
+            self._log_split_metrics(
+                role_str=f'Client #{self.ID}',
+                round_idx=self.state,
+                split='train',
+                trainer_ctx=self.trainer.ctx
+            )
+
+            # ✅ rank0(=main process)에서만 집계본을 파일로 기록
+            if self._is_main_process():
+                ctx = getattr(self.trainer, "ctx", None)
+                agg = getattr(ctx, "eval_metrics", {}) if ctx is not None else {}
+                train_agg = {k: v for k, v in (agg or {}).items() if k.startswith("train_")}#한 클라이언트 기준 집계된 train split 결과.
+                if train_agg:
+                    self._append_raw_line(
+                        role_str=f"Client #{self.ID}",
+                        round_idx=self.state,
+                        results_dict=train_agg,
+                        filename="train_results.raw"
+                    )
+
+
+
+            # ✅ 모든 rank에 대해서 동일하게 메시지를 보냄. 서버는 각 process마다 동일하게 self.comm_manager.comm_queue를 관리해야함.
+            self.comm_manager.send(
+                Message(msg_type='model_para', # ↔ 서버가 “train” 단계로 인식
+                        sender=self.ID, # 이 클라이언트 ID
+                        receiver=[sender], # 앞서 저장한 서버 ID
+                        state=self.state, # (같은) 라운드 번호
+                        timestamp=self._gen_timestamp(init_timestamp=timestamp,
+                                                    instance_number=sample_size), # → 서버의 time-based staleness 제어용
+                        content=(sample_size, model_para_all))) # 데이터 갯수 및 로컬 모델을 content로 담아서 보낸다.
