@@ -1,0 +1,9 @@
+# ignore data & checkpoints
+data/
+checkpoints/
+trash/
+federatedscope/trash/
+final_data_splits/
+checkpoints*/
+runs_logs/
+*.tar.gz
