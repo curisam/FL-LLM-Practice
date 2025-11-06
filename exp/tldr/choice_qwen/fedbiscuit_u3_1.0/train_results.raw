@@ -1,0 +1,2 @@
+{"Role": "Client #3", "Round": 0, "Results_raw": {"train_total": 120, "train_loss": 85.45220255851746, "train_avg_loss": 0.7121016879876455, "train_seen": 120, "train_correct": 58, "train_acc": 0.48333333333333334}, "Adapter": 1}
+{"Role": "Client #1", "Round": 0, "Results_raw": {"train_total": 120, "train_loss": 83.32963943481445, "train_avg_loss": 0.6944136619567871, "train_seen": 120, "train_correct": 67, "train_acc": 0.5583333333333333}, "Adapter": 2}
