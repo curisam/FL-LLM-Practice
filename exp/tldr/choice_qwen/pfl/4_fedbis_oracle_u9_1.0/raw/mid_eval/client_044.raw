@@ -1,2 +1,0 @@
-{"client": 44, "round": 0, "step": 0, "phase": "mid", "split": "val", "adapter_idx": 4, "total": 200, "loss": 145.40847778320312, "avg_loss": 0.7270423889160156, "seen": 200, "correct": 112, "acc": 0.56}
-{"client": 44, "round": 0, "step": 0, "phase": "mid", "split": "test", "adapter_idx": 4, "total": 40, "loss": 25.384532928466797, "avg_loss": 0.63461332321167, "seen": 40, "correct": 25, "acc": 0.625}
