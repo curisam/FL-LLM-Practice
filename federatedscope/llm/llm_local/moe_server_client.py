@@ -170,13 +170,15 @@ class _BaseMoEServer(LLMMultiLoRAServer):
 
             logger.info(f'Client {self.ID}: original weight vector = {w_old}')
             logger.info(f'Client {self.ID}: recent weight vector = {accs_normalised}')
-            logger.info(f'Client {self.ID}: updated weight vector = {w_new}')    
+            logger.info(f'Client {self.ID}: updated weight vector = {w_new}')   
 
         # === (A) 파일로 저장 ===
-        outdir = getattr(self._cfg.eval, 'outdir', None)
-        if outdir is None:
-            outdir = os.path.join(os.getcwd(), 'grouping_logs')
-        os.makedirs(outdir, exist_ok=True)
+        outdir = getattr(self._cfg, 'outdir', None)
+
+
+        # if outdir is None:
+        #     outdir = os.path.join(os.getcwd(), 'grouping_logs')
+        # os.makedirs(outdir, exist_ok=True)
 
         save_path = os.path.join(outdir, f'grouping_weights_round{rnd}_beta{self.beta}.json')
 

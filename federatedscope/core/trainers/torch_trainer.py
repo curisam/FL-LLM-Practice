@@ -44,21 +44,9 @@ class GeneralTorchTrainer(Trainer):
                 self.cfg.llm.deepspeed.use or \
                 self.cfg.llm.accelerator.use:
             
-            #########################  Debug  #########################
-            model_dict = self.ctx.model.state_dict()
-            logger.info(f"[DEBUG] get_model_para: raw state_dict keys (partial) = "
-                        f"{list(model_dict.keys())[:10]} (total {len(model_dict)})")
-            filtered = self._param_filter(model_dict)
-            logger.info(f"[DEBUG] get_model_para: filtered keys (partial) = "
-                        f"{list(filtered.keys())[:10]} (total {len(filtered)})")
-
-            #########################  Debug  #########################
-            import ipdb; ipdb.set_trace(context=15)
-
-            
             # ._param_filter  통해 바뀌는 거 없음. self.ctx.model.state_dict() 반환. 
             # #requires_grad=True인 파라미터 포함인 것 혹은 self.adapter_names에 있는 어댑터 이름이 파라미터 이름 문자열에 포함되면, requires_grad=False라도 포함. 
-            trainable_params = self._param_filter(self.ctx.model.state_dict())
+            trainable_params = self._param_filter(self.accelerator.unwrap_model(self.ctx.model).state_dict())
             
             if isinstance(self.ctx.model, torch.nn.parallel.DistributedDataParallel):
                 # DDP 모델에서 추출했으므로 'module.' 접두사를 제거
