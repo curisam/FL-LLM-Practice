@@ -1,0 +1,533 @@
+2025-11-15 17:27:43 (root:426) INFO: [logger] file handler -> exp/tldr/choice_qwen/gfl/fedbis_1.0_250/exp_print.log
+2025-11-15 17:27:43 (root:51) INFO: [main] outdir=exp/tldr/choice_qwen/gfl/fedbis_1.0_250
+2025-11-15 17:28:03 (federatedscope.core.data.base_translator:152) INFO: Main process: Completion file not found for final_datadict. Generating...
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 300
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 84
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 282
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 164
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 426
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 1031
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 3597
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 246
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 220
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 369
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 418
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 2731
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 12985
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 4286
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 1494
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 2899
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 150
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 2497
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 2436
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 131
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 6296
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 204
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 210
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 51
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 4313
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 4561
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 1217
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 5633
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1373
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 5547
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 1683
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 86
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 1299
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1363
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 5373
+2025-11-15 17:28:03 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 75955
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 643
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 185
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 285
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 220
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 749
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 804
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 613
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 609
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 103
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 197
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 233
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 84
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 2893
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 909
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 989
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 2141
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 521
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 2615
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 172
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 66
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 1584
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 360
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 190
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 15
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 2730
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 616
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 1071
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 856
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1181
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 1462
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 691
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 147
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 798
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1039
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 1258
+2025-11-15 17:28:32 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 29029
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 2036
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 300
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 923
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 730
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 1659
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 1516
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 453
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 1638
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 48
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 106
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 70
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 270
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 2603
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 602
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 1465
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 3235
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 1561
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 4663
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 659
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 28
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 1784
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 1290
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 508
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 19
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 2594
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 274
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 2064
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 323
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1263
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 1293
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 532
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 48
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 673
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1385
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 988
+2025-11-15 17:28:43 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 39603
+2025-11-15 17:28:58 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:28:59 (federatedscope.core.data.base_translator:218) INFO: Client 1 - Created dataset sizes: Train=2793, Val=146, Test=40
+2025-11-15 17:29:00 (federatedscope.core.data.base_translator:218) INFO: Client 2 - Created dataset sizes: Train=503, Val=26, Test=40
+2025-11-15 17:29:00 (federatedscope.core.data.base_translator:218) INFO: Client 3 - Created dataset sizes: Train=1378, Val=72, Test=40
+2025-11-15 17:29:01 (federatedscope.core.data.base_translator:218) INFO: Client 4 - Created dataset sizes: Train=1021, Val=53, Test=40
+2025-11-15 17:29:01 (federatedscope.core.data.base_translator:218) INFO: Client 5 - Created dataset sizes: Train=2655, Val=139, Test=40
+2025-11-15 17:29:02 (federatedscope.core.data.base_translator:218) INFO: Client 6 - Created dataset sizes: Train=3146, Val=165, Test=40
+2025-11-15 17:29:02 (federatedscope.core.data.base_translator:218) INFO: Client 7 - Created dataset sizes: Train=4423, Val=200, Test=40
+2025-11-15 17:29:03 (federatedscope.core.data.base_translator:218) INFO: Client 8 - Created dataset sizes: Train=2331, Val=122, Test=40
+2025-11-15 17:29:03 (federatedscope.core.data.base_translator:218) INFO: Client 9 - Created dataset sizes: Train=315, Val=16, Test=40
+2025-11-15 17:29:04 (federatedscope.core.data.base_translator:218) INFO: Client 10 - Created dataset sizes: Train=601, Val=31, Test=40
+2025-11-15 17:29:04 (federatedscope.core.data.base_translator:218) INFO: Client 11 - Created dataset sizes: Train=647, Val=34, Test=40
+2025-11-15 17:29:05 (federatedscope.core.data.base_translator:218) INFO: Client 12 - Created dataset sizes: Train=2893, Val=152, Test=40
+2025-11-15 17:29:05 (federatedscope.core.data.base_translator:218) INFO: Client 13 - Created dataset sizes: Train=18241, Val=200, Test=40
+2025-11-15 17:29:06 (federatedscope.core.data.base_translator:218) INFO: Client 14 - Created dataset sizes: Train=5557, Val=200, Test=40
+2025-11-15 17:29:06 (federatedscope.core.data.base_translator:218) INFO: Client 15 - Created dataset sizes: Train=3713, Val=195, Test=40
+2025-11-15 17:29:07 (federatedscope.core.data.base_translator:218) INFO: Client 16 - Created dataset sizes: Train=8035, Val=200, Test=40
+2025-11-15 17:29:07 (federatedscope.core.data.base_translator:218) INFO: Client 17 - Created dataset sizes: Train=2083, Val=109, Test=40
+2025-11-15 17:29:08 (federatedscope.core.data.base_translator:218) INFO: Client 18 - Created dataset sizes: Train=9535, Val=200, Test=40
+2025-11-15 17:29:08 (federatedscope.core.data.base_translator:218) INFO: Client 19 - Created dataset sizes: Train=3066, Val=161, Test=40
+2025-11-15 17:29:09 (federatedscope.core.data.base_translator:218) INFO: Client 20 - Created dataset sizes: Train=176, Val=9, Test=40
+2025-11-15 17:29:09 (federatedscope.core.data.base_translator:218) INFO: Client 21 - Created dataset sizes: Train=9424, Val=200, Test=40
+2025-11-15 17:29:10 (federatedscope.core.data.base_translator:218) INFO: Client 22 - Created dataset sizes: Train=1724, Val=90, Test=40
+2025-11-15 17:29:10 (federatedscope.core.data.base_translator:218) INFO: Client 23 - Created dataset sizes: Train=825, Val=43, Test=40
+2025-11-15 17:29:11 (federatedscope.core.data.base_translator:218) INFO: Client 24 - Created dataset sizes: Train=43, Val=2, Test=40
+2025-11-15 17:29:11 (federatedscope.core.data.base_translator:218) INFO: Client 25 - Created dataset sizes: Train=9397, Val=200, Test=40
+2025-11-15 17:29:12 (federatedscope.core.data.base_translator:218) INFO: Client 26 - Created dataset sizes: Train=5211, Val=200, Test=40
+2025-11-15 17:29:13 (federatedscope.core.data.base_translator:218) INFO: Client 27 - Created dataset sizes: Train=4112, Val=200, Test=40
+2025-11-15 17:29:13 (federatedscope.core.data.base_translator:218) INFO: Client 28 - Created dataset sizes: Train=6572, Val=200, Test=40
+2025-11-15 17:29:14 (federatedscope.core.data.base_translator:218) INFO: Client 29 - Created dataset sizes: Train=3589, Val=188, Test=40
+2025-11-15 17:29:14 (federatedscope.core.data.base_translator:218) INFO: Client 30 - Created dataset sizes: Train=8062, Val=200, Test=40
+2025-11-15 17:29:15 (federatedscope.core.data.base_translator:218) INFO: Client 31 - Created dataset sizes: Train=2723, Val=143, Test=40
+2025-11-15 17:29:15 (federatedscope.core.data.base_translator:218) INFO: Client 32 - Created dataset sizes: Train=229, Val=12, Test=40
+2025-11-15 17:29:16 (federatedscope.core.data.base_translator:218) INFO: Client 33 - Created dataset sizes: Train=2594, Val=136, Test=40
+2025-11-15 17:29:16 (federatedscope.core.data.base_translator:218) INFO: Client 34 - Created dataset sizes: Train=3560, Val=187, Test=40
+2025-11-15 17:29:17 (federatedscope.core.data.base_translator:218) INFO: Client 35 - Created dataset sizes: Train=7379, Val=200, Test=40
+2025-11-15 17:29:17 (federatedscope.core.data.base_translator:226) INFO: Main process: Saving final data dict to ./final_data_splits/final_datadict.pickle
+2025-11-15 17:29:52 (federatedscope.core.data.base_translator:232) INFO: Main process: Creating completion file at ./final_data_splits/final_datadict.complete
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:266) INFO: [Final Split Summary][loaded][server=0][rank=0/4] Train=75955, Val=29029, Test=39603, Total=144587
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=1][rank=0/4] Train=2793, Val=146, Test=40, Total=2979
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=2][rank=0/4] Train=503, Val=26, Test=40, Total=569
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=3][rank=0/4] Train=1378, Val=72, Test=40, Total=1490
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=4][rank=0/4] Train=1021, Val=53, Test=40, Total=1114
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=5][rank=0/4] Train=2655, Val=139, Test=40, Total=2834
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=6][rank=0/4] Train=3146, Val=165, Test=40, Total=3351
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=7][rank=0/4] Train=4423, Val=200, Test=40, Total=4663
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=8][rank=0/4] Train=2331, Val=122, Test=40, Total=2493
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=9][rank=0/4] Train=315, Val=16, Test=40, Total=371
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=10][rank=0/4] Train=601, Val=31, Test=40, Total=672
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=11][rank=0/4] Train=647, Val=34, Test=40, Total=721
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=12][rank=0/4] Train=2893, Val=152, Test=40, Total=3085
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=13][rank=0/4] Train=18241, Val=200, Test=40, Total=18481
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=14][rank=0/4] Train=5557, Val=200, Test=40, Total=5797
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=15][rank=0/4] Train=3713, Val=195, Test=40, Total=3948
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=16][rank=0/4] Train=8035, Val=200, Test=40, Total=8275
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=17][rank=0/4] Train=2083, Val=109, Test=40, Total=2232
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=18][rank=0/4] Train=9535, Val=200, Test=40, Total=9775
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=19][rank=0/4] Train=3066, Val=161, Test=40, Total=3267
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=20][rank=0/4] Train=176, Val=9, Test=40, Total=225
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=21][rank=0/4] Train=9424, Val=200, Test=40, Total=9664
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=22][rank=0/4] Train=1724, Val=90, Test=40, Total=1854
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=23][rank=0/4] Train=825, Val=43, Test=40, Total=908
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=24][rank=0/4] Train=43, Val=2, Test=40, Total=85
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=25][rank=0/4] Train=9397, Val=200, Test=40, Total=9637
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=26][rank=0/4] Train=5211, Val=200, Test=40, Total=5451
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=27][rank=0/4] Train=4112, Val=200, Test=40, Total=4352
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=28][rank=0/4] Train=6572, Val=200, Test=40, Total=6812
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=29][rank=0/4] Train=3589, Val=188, Test=40, Total=3817
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=30][rank=0/4] Train=8062, Val=200, Test=40, Total=8302
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=31][rank=0/4] Train=2723, Val=143, Test=40, Total=2906
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=32][rank=0/4] Train=229, Val=12, Test=40, Total=281
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=33][rank=0/4] Train=2594, Val=136, Test=40, Total=2770
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=34][rank=0/4] Train=3560, Val=187, Test=40, Total=3787
+2025-11-15 17:30:24 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=35][rank=0/4] Train=7379, Val=200, Test=40, Total=7619
+2025-11-15 17:30:27 (federatedscope.core.auxiliaries.utils:175) INFO: The device information file is not provided
+2025-11-15 17:30:27 (federatedscope.core.auxiliaries.model_builder:139) WARNING: The input shape is None. Please specify the `data.input_shape`(a tuple) or give the representative data to `get_model` if necessary
+2025-11-15 17:30:30 (federatedscope.llm.misc.debug_utils:120) INFO: [DBG_EMB][tag=after-build][rank=0] tok_len=151643 | base=Qwen2ForCausalLM | in_emb=(Embedding) num=151646 ptr=2215421504 | out_emb=(Linear) num=151646 ptr=2215421504 | lora_ptr=None
+2025-11-15 17:30:33 (federatedscope.core.fed_runner:211) INFO: Server has been set up ... 
+2025-11-15 17:30:33 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:35 (federatedscope.core.fed_runner:275) INFO: Client 1 has been set up ... 
+2025-11-15 17:30:35 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:36 (federatedscope.core.fed_runner:275) INFO: Client 2 has been set up ... 
+2025-11-15 17:30:36 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:37 (federatedscope.core.fed_runner:275) INFO: Client 3 has been set up ... 
+2025-11-15 17:30:37 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:38 (federatedscope.core.fed_runner:275) INFO: Client 4 has been set up ... 
+2025-11-15 17:30:39 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:39 (federatedscope.core.fed_runner:275) INFO: Client 5 has been set up ... 
+2025-11-15 17:30:40 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:30:40 (federatedscope.core.fed_runner:275) INFO: Client 6 has been set up ... 
+2025-11-15 17:30:41 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:31:38 (root:426) INFO: [logger] file handler -> exp/tldr/choice_qwen/gfl/fedbis_1.0_250/exp_print.log
+2025-11-15 17:31:38 (root:51) INFO: [main] outdir=exp/tldr/choice_qwen/gfl/fedbis_1.0_250
+2025-11-15 17:31:58 (federatedscope.core.data.base_translator:152) INFO: Main process: Completion file not found for final_datadict. Generating...
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 300
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 84
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 282
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 164
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 426
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 1031
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 3597
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 246
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 220
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 369
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 418
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 2731
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 12985
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 4286
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 1494
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 2899
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 150
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 2497
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 2436
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 131
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 6296
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 204
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 210
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 51
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 4313
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 4561
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 1217
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 5633
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1373
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 5547
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 1683
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 86
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 1299
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1363
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 5373
+2025-11-15 17:31:58 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 75955
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 643
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 185
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 285
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 220
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 749
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 804
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 613
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 609
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 103
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 197
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 233
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 84
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 2893
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 909
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 989
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 2141
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 521
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 2615
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 172
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 66
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 1584
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 360
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 190
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 15
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 2730
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 616
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 1071
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 856
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1181
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 1462
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 691
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 147
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 798
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1039
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 1258
+2025-11-15 17:32:27 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 29029
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 0	Category: 0	Size: 2036
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 1	Category: 1	Size: 300
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 2	Category: 2	Size: 923
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 3	Category: 3	Size: 730
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 4	Category: 4	Size: 1659
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 5	Category: 5	Size: 1516
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 6	Category: 6	Size: 453
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 7	Category: 7	Size: 1638
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 8	Category: 8	Size: 48
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 9	Category: 9	Size: 106
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 10	Category: 10	Size: 70
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 11	Category: 11	Size: 270
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 12	Category: 12	Size: 2603
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 13	Category: 13	Size: 602
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 14	Category: 14	Size: 1465
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 15	Category: 15	Size: 3235
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 16	Category: 16	Size: 1561
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 17	Category: 17	Size: 4663
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 18	Category: 18	Size: 659
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 19	Category: 19	Size: 28
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 20	Category: 20	Size: 1784
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 21	Category: 21	Size: 1290
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 22	Category: 22	Size: 508
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 23	Category: 23	Size: 19
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 24	Category: 24	Size: 2594
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 25	Category: 25	Size: 274
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 26	Category: 26	Size: 2064
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 27	Category: 27	Size: 323
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 28	Category: 28	Size: 1263
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 29	Category: 29	Size: 1293
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 30	Category: 30	Size: 532
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 31	Category: 31	Size: 48
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 32	Category: 32	Size: 673
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 33	Category: 33	Size: 1385
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:62) INFO: Index: 34	Category: 34	Size: 988
+2025-11-15 17:32:37 (federatedscope.core.splitters.generic.meta_splitter:66) INFO: Total size: 39603
+2025-11-15 17:32:52 (federatedscope.core.splitters.generic.meta_splitter:110) INFO: Data successfully split into 35 clients, each with a unique category.
+2025-11-15 17:32:53 (federatedscope.core.data.base_translator:218) INFO: Client 1 - Created dataset sizes: Train=2793, Val=146, Test=40
+2025-11-15 17:32:54 (federatedscope.core.data.base_translator:218) INFO: Client 2 - Created dataset sizes: Train=503, Val=26, Test=40
+2025-11-15 17:32:54 (federatedscope.core.data.base_translator:218) INFO: Client 3 - Created dataset sizes: Train=1378, Val=72, Test=40
+2025-11-15 17:32:55 (federatedscope.core.data.base_translator:218) INFO: Client 4 - Created dataset sizes: Train=1021, Val=53, Test=40
+2025-11-15 17:32:55 (federatedscope.core.data.base_translator:218) INFO: Client 5 - Created dataset sizes: Train=2655, Val=139, Test=40
+2025-11-15 17:32:56 (federatedscope.core.data.base_translator:218) INFO: Client 6 - Created dataset sizes: Train=3146, Val=165, Test=40
+2025-11-15 17:32:56 (federatedscope.core.data.base_translator:218) INFO: Client 7 - Created dataset sizes: Train=4423, Val=200, Test=40
+2025-11-15 17:32:57 (federatedscope.core.data.base_translator:218) INFO: Client 8 - Created dataset sizes: Train=2331, Val=122, Test=40
+2025-11-15 17:32:57 (federatedscope.core.data.base_translator:218) INFO: Client 9 - Created dataset sizes: Train=315, Val=16, Test=40
+2025-11-15 17:32:58 (federatedscope.core.data.base_translator:218) INFO: Client 10 - Created dataset sizes: Train=601, Val=31, Test=40
+2025-11-15 17:32:58 (federatedscope.core.data.base_translator:218) INFO: Client 11 - Created dataset sizes: Train=647, Val=34, Test=40
+2025-11-15 17:32:59 (federatedscope.core.data.base_translator:218) INFO: Client 12 - Created dataset sizes: Train=2893, Val=152, Test=40
+2025-11-15 17:32:59 (federatedscope.core.data.base_translator:218) INFO: Client 13 - Created dataset sizes: Train=18241, Val=200, Test=40
+2025-11-15 17:33:00 (federatedscope.core.data.base_translator:218) INFO: Client 14 - Created dataset sizes: Train=5557, Val=200, Test=40
+2025-11-15 17:33:00 (federatedscope.core.data.base_translator:218) INFO: Client 15 - Created dataset sizes: Train=3713, Val=195, Test=40
+2025-11-15 17:33:01 (federatedscope.core.data.base_translator:218) INFO: Client 16 - Created dataset sizes: Train=8035, Val=200, Test=40
+2025-11-15 17:33:01 (federatedscope.core.data.base_translator:218) INFO: Client 17 - Created dataset sizes: Train=2083, Val=109, Test=40
+2025-11-15 17:33:02 (federatedscope.core.data.base_translator:218) INFO: Client 18 - Created dataset sizes: Train=9535, Val=200, Test=40
+2025-11-15 17:33:03 (federatedscope.core.data.base_translator:218) INFO: Client 19 - Created dataset sizes: Train=3066, Val=161, Test=40
+2025-11-15 17:33:03 (federatedscope.core.data.base_translator:218) INFO: Client 20 - Created dataset sizes: Train=176, Val=9, Test=40
+2025-11-15 17:33:04 (federatedscope.core.data.base_translator:218) INFO: Client 21 - Created dataset sizes: Train=9424, Val=200, Test=40
+2025-11-15 17:33:04 (federatedscope.core.data.base_translator:218) INFO: Client 22 - Created dataset sizes: Train=1724, Val=90, Test=40
+2025-11-15 17:33:05 (federatedscope.core.data.base_translator:218) INFO: Client 23 - Created dataset sizes: Train=825, Val=43, Test=40
+2025-11-15 17:33:05 (federatedscope.core.data.base_translator:218) INFO: Client 24 - Created dataset sizes: Train=43, Val=2, Test=40
+2025-11-15 17:33:06 (federatedscope.core.data.base_translator:218) INFO: Client 25 - Created dataset sizes: Train=9397, Val=200, Test=40
+2025-11-15 17:33:06 (federatedscope.core.data.base_translator:218) INFO: Client 26 - Created dataset sizes: Train=5211, Val=200, Test=40
+2025-11-15 17:33:07 (federatedscope.core.data.base_translator:218) INFO: Client 27 - Created dataset sizes: Train=4112, Val=200, Test=40
+2025-11-15 17:33:07 (federatedscope.core.data.base_translator:218) INFO: Client 28 - Created dataset sizes: Train=6572, Val=200, Test=40
+2025-11-15 17:33:08 (federatedscope.core.data.base_translator:218) INFO: Client 29 - Created dataset sizes: Train=3589, Val=188, Test=40
+2025-11-15 17:33:08 (federatedscope.core.data.base_translator:218) INFO: Client 30 - Created dataset sizes: Train=8062, Val=200, Test=40
+2025-11-15 17:33:09 (federatedscope.core.data.base_translator:218) INFO: Client 31 - Created dataset sizes: Train=2723, Val=143, Test=40
+2025-11-15 17:33:09 (federatedscope.core.data.base_translator:218) INFO: Client 32 - Created dataset sizes: Train=229, Val=12, Test=40
+2025-11-15 17:33:10 (federatedscope.core.data.base_translator:218) INFO: Client 33 - Created dataset sizes: Train=2594, Val=136, Test=40
+2025-11-15 17:33:10 (federatedscope.core.data.base_translator:218) INFO: Client 34 - Created dataset sizes: Train=3560, Val=187, Test=40
+2025-11-15 17:33:11 (federatedscope.core.data.base_translator:218) INFO: Client 35 - Created dataset sizes: Train=7379, Val=200, Test=40
+2025-11-15 17:33:11 (federatedscope.core.data.base_translator:226) INFO: Main process: Saving final data dict to ./final_data_splits/final_datadict.pickle
+2025-11-15 17:33:47 (federatedscope.core.data.base_translator:232) INFO: Main process: Creating completion file at ./final_data_splits/final_datadict.complete
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:266) INFO: [Final Split Summary][loaded][server=0][rank=0/4] Train=75955, Val=29029, Test=39603, Total=144587
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=1][rank=0/4] Train=2793, Val=146, Test=40, Total=2979
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=2][rank=0/4] Train=503, Val=26, Test=40, Total=569
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=3][rank=0/4] Train=1378, Val=72, Test=40, Total=1490
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=4][rank=0/4] Train=1021, Val=53, Test=40, Total=1114
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=5][rank=0/4] Train=2655, Val=139, Test=40, Total=2834
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=6][rank=0/4] Train=3146, Val=165, Test=40, Total=3351
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=7][rank=0/4] Train=4423, Val=200, Test=40, Total=4663
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=8][rank=0/4] Train=2331, Val=122, Test=40, Total=2493
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=9][rank=0/4] Train=315, Val=16, Test=40, Total=371
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=10][rank=0/4] Train=601, Val=31, Test=40, Total=672
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=11][rank=0/4] Train=647, Val=34, Test=40, Total=721
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=12][rank=0/4] Train=2893, Val=152, Test=40, Total=3085
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=13][rank=0/4] Train=18241, Val=200, Test=40, Total=18481
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=14][rank=0/4] Train=5557, Val=200, Test=40, Total=5797
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=15][rank=0/4] Train=3713, Val=195, Test=40, Total=3948
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=16][rank=0/4] Train=8035, Val=200, Test=40, Total=8275
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=17][rank=0/4] Train=2083, Val=109, Test=40, Total=2232
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=18][rank=0/4] Train=9535, Val=200, Test=40, Total=9775
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=19][rank=0/4] Train=3066, Val=161, Test=40, Total=3267
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=20][rank=0/4] Train=176, Val=9, Test=40, Total=225
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=21][rank=0/4] Train=9424, Val=200, Test=40, Total=9664
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=22][rank=0/4] Train=1724, Val=90, Test=40, Total=1854
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=23][rank=0/4] Train=825, Val=43, Test=40, Total=908
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=24][rank=0/4] Train=43, Val=2, Test=40, Total=85
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=25][rank=0/4] Train=9397, Val=200, Test=40, Total=9637
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=26][rank=0/4] Train=5211, Val=200, Test=40, Total=5451
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=27][rank=0/4] Train=4112, Val=200, Test=40, Total=4352
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=28][rank=0/4] Train=6572, Val=200, Test=40, Total=6812
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=29][rank=0/4] Train=3589, Val=188, Test=40, Total=3817
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=30][rank=0/4] Train=8062, Val=200, Test=40, Total=8302
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=31][rank=0/4] Train=2723, Val=143, Test=40, Total=2906
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=32][rank=0/4] Train=229, Val=12, Test=40, Total=281
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=33][rank=0/4] Train=2594, Val=136, Test=40, Total=2770
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=34][rank=0/4] Train=3560, Val=187, Test=40, Total=3787
+2025-11-15 17:34:19 (federatedscope.core.data.base_translator:275) INFO: [Final Split Summary][loaded][client=35][rank=0/4] Train=7379, Val=200, Test=40, Total=7619
+2025-11-15 17:34:21 (federatedscope.core.auxiliaries.utils:175) INFO: The device information file is not provided
+2025-11-15 17:34:21 (federatedscope.core.auxiliaries.model_builder:139) WARNING: The input shape is None. Please specify the `data.input_shape`(a tuple) or give the representative data to `get_model` if necessary
+2025-11-15 17:34:24 (federatedscope.llm.misc.debug_utils:120) INFO: [DBG_EMB][tag=after-build][rank=0] tok_len=151643 | base=Qwen2ForCausalLM | in_emb=(Embedding) num=151646 ptr=2221611392 | out_emb=(Linear) num=151646 ptr=2221611392 | lora_ptr=None
+2025-11-15 17:34:26 (federatedscope.core.fed_runner:211) INFO: Server has been set up ... 
+2025-11-15 17:34:27 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:28 (federatedscope.core.fed_runner:275) INFO: Client 1 has been set up ... 
+2025-11-15 17:34:28 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:29 (federatedscope.core.fed_runner:275) INFO: Client 2 has been set up ... 
+2025-11-15 17:34:29 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:30 (federatedscope.core.fed_runner:275) INFO: Client 3 has been set up ... 
+2025-11-15 17:34:30 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:31 (federatedscope.core.fed_runner:275) INFO: Client 4 has been set up ... 
+2025-11-15 17:34:31 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:32 (federatedscope.core.fed_runner:275) INFO: Client 5 has been set up ... 
+2025-11-15 17:34:33 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:33 (federatedscope.core.fed_runner:275) INFO: Client 6 has been set up ... 
+2025-11-15 17:34:34 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:34 (federatedscope.core.fed_runner:275) INFO: Client 7 has been set up ... 
+2025-11-15 17:34:35 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:36 (federatedscope.core.fed_runner:275) INFO: Client 8 has been set up ... 
+2025-11-15 17:34:36 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:37 (federatedscope.core.fed_runner:275) INFO: Client 9 has been set up ... 
+2025-11-15 17:34:37 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:38 (federatedscope.core.fed_runner:275) INFO: Client 10 has been set up ... 
+2025-11-15 17:34:38 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:39 (federatedscope.core.fed_runner:275) INFO: Client 11 has been set up ... 
+2025-11-15 17:34:39 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:40 (federatedscope.core.fed_runner:275) INFO: Client 12 has been set up ... 
+2025-11-15 17:34:40 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:41 (federatedscope.core.fed_runner:275) INFO: Client 13 has been set up ... 
+2025-11-15 17:34:41 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:42 (federatedscope.core.fed_runner:275) INFO: Client 14 has been set up ... 
+2025-11-15 17:34:42 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:43 (federatedscope.core.fed_runner:275) INFO: Client 15 has been set up ... 
+2025-11-15 17:34:43 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:44 (federatedscope.core.fed_runner:275) INFO: Client 16 has been set up ... 
+2025-11-15 17:34:44 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:45 (federatedscope.core.fed_runner:275) INFO: Client 17 has been set up ... 
+2025-11-15 17:34:45 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:46 (federatedscope.core.fed_runner:275) INFO: Client 18 has been set up ... 
+2025-11-15 17:34:46 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:47 (federatedscope.core.fed_runner:275) INFO: Client 19 has been set up ... 
+2025-11-15 17:34:47 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:49 (federatedscope.core.fed_runner:275) INFO: Client 20 has been set up ... 
+2025-11-15 17:34:49 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:50 (federatedscope.core.fed_runner:275) INFO: Client 21 has been set up ... 
+2025-11-15 17:34:50 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:51 (federatedscope.core.fed_runner:275) INFO: Client 22 has been set up ... 
+2025-11-15 17:34:51 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:52 (federatedscope.core.fed_runner:275) INFO: Client 23 has been set up ... 
+2025-11-15 17:34:52 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:53 (federatedscope.core.fed_runner:275) INFO: Client 24 has been set up ... 
+2025-11-15 17:34:53 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:54 (federatedscope.core.fed_runner:275) INFO: Client 25 has been set up ... 
+2025-11-15 17:34:54 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:55 (federatedscope.core.fed_runner:275) INFO: Client 26 has been set up ... 
+2025-11-15 17:34:56 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:57 (federatedscope.core.fed_runner:275) INFO: Client 27 has been set up ... 
+2025-11-15 17:34:57 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:58 (federatedscope.core.fed_runner:275) INFO: Client 28 has been set up ... 
+2025-11-15 17:34:58 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:34:59 (federatedscope.core.fed_runner:275) INFO: Client 29 has been set up ... 
+2025-11-15 17:34:59 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:00 (federatedscope.core.fed_runner:275) INFO: Client 30 has been set up ... 
+2025-11-15 17:35:00 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:01 (federatedscope.core.fed_runner:275) INFO: Client 31 has been set up ... 
+2025-11-15 17:35:02 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:03 (federatedscope.core.fed_runner:275) INFO: Client 32 has been set up ... 
+2025-11-15 17:35:03 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:04 (federatedscope.core.fed_runner:275) INFO: Client 33 has been set up ... 
+2025-11-15 17:35:04 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:05 (federatedscope.core.fed_runner:275) INFO: Client 34 has been set up ... 
+2025-11-15 17:35:05 (federatedscope.llm.trainer.trainer:181) INFO: Choice token IDs: [362, 425]
+2025-11-15 17:35:06 (federatedscope.core.fed_runner:275) INFO: Client 35 has been set up ... 
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:569) INFO: Model meta-info: <class 'federatedscope.llm.model.adapter_builder.AdapterModel'>.
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:584) INFO: Num of original para names: 336.
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:585) INFO: Num of original trainable para names: 626.
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:587) INFO: Num of preserved para names in local update: 336. 
+Preserved para names in local update: {'base_model.model.model.layers.20.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.14.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.15.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.3.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.23.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.17.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.7.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.19.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.12.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.18.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.7.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.18.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.19.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.17.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.14.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.21.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.18.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.6.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.8.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.9.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.12.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.19.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.21.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.3.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.8.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.5.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.7.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.17.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.20.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.9.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.18.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.12.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.23.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.2.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.9.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.9.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.12.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.0.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.1.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.22.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.10.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.0.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.1.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.15.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.10.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.9.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.13.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.2.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.12.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.13.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.22.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.5.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.17.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.21.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.7.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.11.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.5.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.8.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.22.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.15.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.21.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.20.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.9.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.5.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.4.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.8.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.17.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.8.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.4.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.17.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.6.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.10.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.4.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.17.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.7.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.10.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.8.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.1.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.13.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.17.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.0.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.13.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.20.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.3.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.12.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.23.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.16.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.11.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.2.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.19.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.20.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.13.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.6.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.3.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.14.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.5.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.5.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.15.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.6.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.4.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.2.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.20.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.22.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.8.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.7.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.12.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.3.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.17.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.7.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.20.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.15.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.2.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.23.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.20.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.15.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.19.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.15.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.17.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.13.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.22.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.13.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.15.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.18.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.14.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.16.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.1.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.8.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.11.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.5.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.9.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.4.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.14.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.8.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.23.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.12.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.3.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.3.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.0.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.10.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.5.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.18.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.7.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.11.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.19.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.10.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.3.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.6.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.11.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.18.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.2.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.5.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.21.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.13.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.21.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.19.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.21.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.16.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.20.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.18.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.22.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.6.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.23.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.10.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.8.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.19.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.9.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.15.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.14.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.22.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.10.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.3.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.15.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.5.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.2.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.0.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.12.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.19.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.6.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.1.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.9.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.23.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.22.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.16.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.10.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.6.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.5.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.9.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.18.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.7.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.14.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.16.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.19.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.12.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.1.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.14.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.12.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.0.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.7.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.13.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.8.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.16.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.7.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.22.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.12.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.17.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.23.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.18.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.17.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.13.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.3.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.3.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.20.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.1.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.3.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.6.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.22.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.13.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.20.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.3.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.11.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.18.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.1.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.4.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.6.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.11.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.0.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.14.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.14.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.19.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.20.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.19.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.14.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.6.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.5.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.22.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.15.mlp.down_proj.lora_A.default.weight', 'base_model.model.model.layers.13.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.15.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.8.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.9.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.5.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.14.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.2.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.6.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.3.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.12.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.9.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.10.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.17.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.15.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.23.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.2.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.4.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.15.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.19.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.16.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.12.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.13.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.7.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.16.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.6.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.1.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.16.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.11.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.0.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.18.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.18.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.1.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.2.mlp.gate_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.10.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.11.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.2.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.10.mlp.gate_proj.lora_B.default.weight', 'base_model.model.model.layers.20.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.17.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.13.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.22.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.10.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.10.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.2.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.19.self_attn.k_proj.lora_B.default.weight', 'base_model.model.model.layers.20.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.9.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.2.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.22.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.1.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.6.mlp.up_proj.lora_B.default.weight', 'base_model.model.model.layers.1.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.7.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.14.self_attn.k_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.v_proj.lora_A.default.weight', 'base_model.model.model.layers.4.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.7.self_attn.q_proj.lora_A.default.weight', 'base_model.model.model.layers.21.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.9.self_attn.o_proj.lora_B.default.weight', 'base_model.model.model.layers.8.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.8.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.18.self_attn.v_proj.lora_B.default.weight', 'base_model.model.model.layers.22.mlp.up_proj.lora_A.default.weight', 'base_model.model.model.layers.5.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.14.self_attn.o_proj.lora_A.default.weight', 'base_model.model.model.layers.1.self_attn.q_proj.lora_B.default.weight', 'base_model.model.model.layers.1.mlp.down_proj.lora_B.default.weight', 'base_model.model.model.layers.2.self_attn.k_proj.lora_B.default.weight'}.
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:591) INFO: Num of filtered para names in local update: 0. 
+Filtered para names in local update: set().
+2025-11-15 17:35:06 (federatedscope.core.trainers.trainer:599) INFO: After register default hooks,
+	the hooks_in_train is:
+	{
+	  "on_fit_start": [
+	    "_hook_on_fit_start_numerical_precision",
+	    "_hook_on_data_parallel_init",
+	    "_hook_on_fit_start_init",
+	    "_hook_on_fit_start_calculate_model_size"
+	  ],
+	  "on_batch_start": [
+	    "_hook_on_batch_start_init"
+	  ],
+	  "on_batch_forward": [
+	    "_hook_on_batch_forward",
+	    "_hook_on_batch_forward_regularizer",
+	    "_hook_on_batch_forward_flop_count"
+	  ],
+	  "on_batch_backward": [
+	    "_hook_on_batch_backward"
+	  ],
+	  "on_batch_end": [
+	    "_hook_on_batch_end"
+	  ],
+	  "on_fit_end": [
+	    "_hook_on_fit_end",
+	    "_hook_on_fit_end_free_space"
+	  ]
+	};
+	the hooks_in_eval is:
+            t{
+	  "on_fit_start": [
+	    "_hook_on_fit_start_numerical_precision",
+	    "_hook_on_data_parallel_init",
+	    "_hook_on_fit_start_init"
+	  ],
+	  "on_batch_start": [
+	    "_hook_on_batch_start_init"
+	  ],
+	  "on_batch_forward": [
+	    "_hook_on_batch_forward"
+	  ],
+	  "on_batch_end": [
+	    "_hook_on_batch_end"
+	  ],
+	  "on_fit_end": [
+	    "_hook_on_fit_end",
+	    "_hook_on_fit_end_free_space"
+	  ]
+	}
+2025-11-15 17:35:06 (federatedscope.core.workers.server:984) INFO: Waited all clients join, start now...
+2025-11-15 17:35:06 (federatedscope.core.workers.server:993) INFO: ----------- Starting training (Round #0) -------------
+2025-11-15 17:35:26 (federatedscope.core.trainers.torch_trainer:169) INFO: [Model Sync] lenient load | loaded=336 skipped=0 missing=291 unexpected=0
+2025-11-15 17:35:26 (federatedscope.llm.trainer.trainer:391) INFO: [mid-eval] every_n_train_steps=-1
+2025-11-15 17:35:26 (federatedscope.llm.trainer.trainer:432) INFO: [Stateless LR Controller] In Round #0, planning to set LR to 1.00e-05
+2025-11-15 17:35:26 (federatedscope.llm.trainer.trainer:317) INFO: Dataloader for 'train' has been reset and recreated. (sharded=True, world_size=4, rank=0, local_count=2016, total=8062)
+2025-11-15 17:35:26 (federatedscope.llm.misc.debug_utils:120) INFO: [DBG_EMB][tag=after-reset-train][rank=0] tok_len=151643 | base=AdapterModel | in_emb=(Embedding) num=151646 ptr=2221611392 | out_emb=(None) num=None ptr=None | lora_ptr=None
+2025-11-15 17:35:27 (federatedscope.llm.trainer.trainer:818) INFO: Successfully applied new LR 1.00e-05 to the optimizer.
+2025-11-15 17:35:27 (federatedscope.llm.trainer.trainer:839) INFO: [fit-start] batch_or_epoch=None, train_iter=None, num_train_batch=30, num_train_batch_last_epoch=30, num_train_epoch=1, grad_accum_step=2, accum_in_accel=2
+2025-11-15 17:35:27 (federatedscope.llm.trainer.trainer:860) INFO: [force-step-schedule] epoch=1, num_batches=30, grad_accum_step=2 (=> total micro-batches = 60)
+2025-11-15 17:35:27 (federatedscope.llm.trainer.trainer:552) INFO: [run-batch-setup] split=train, len(loader)=1008, num_batches(ctx)=30, grad_accum_step=2, will_run_step(loops)=60
+2025-11-15 17:35:28 (federatedscope.llm.trainer.reward_choice_trainer:137) WARNING: Skip batch: non-finite loss=nan

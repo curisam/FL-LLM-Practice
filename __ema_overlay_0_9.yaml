@@ -1,3 +1,0 @@
-llm:
-  adapter:
-    ema_beta: !!python/tuple [0.9]

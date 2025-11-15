@@ -227,9 +227,6 @@ class LLMMultiLoRAServer(Server):
                     n, multi_states = content
                     msg_list.append((n, multi_states[model_idx]))
 
-            logger.info(f"[DEBUG] Round {self.state}: train_msg_buffer keys = {list(self.msg_buffer['train'][self.state].keys())}")
-            logger.info(f"[DEBUG] Round {self.state}: collected msg_list length = {len(msg_list)}")
-
             
             aggregated_num = len(msg_list)
 
@@ -260,10 +257,8 @@ class LLMMultiLoRAServer(Server):
                     result = aggregator.aggregate_on_model(agg_info)
 
 
-            logger.info(f"Server model keys before merge: {list(model.state_dict().keys())}")
-            logger.info(f"Aggregated result keys: {list(result.keys())}")
 
-            import ipdb; ipdb.set_trace(context=15)
+
 
             # # Due to lazy load, we merge two state dict
             merged_param = merge_param_dict(model.state_dict().copy(), result)
