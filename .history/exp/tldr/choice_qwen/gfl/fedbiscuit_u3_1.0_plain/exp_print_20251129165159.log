@@ -1,0 +1,42 @@
+2025-11-29 16:47:33 (root:426) INFO: [logger] file handler -> exp/tldr/choice_qwen/gfl/fedbiscuit_u3_1.0_plain/exp_print.log
+2025-11-29 16:47:33 (root:53) INFO: [main] outdir=exp/tldr/choice_qwen/gfl/fedbiscuit_u3_1.0_plain
+2025-11-29 16:47:53 (federatedscope.core.data.base_translator:282) INFO: Main process: Completion file found. Skipping generation.
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:359) INFO: [Final Split Summary][loaded][server=0][rank=0/1] Train=141102, Val=1700, Test=1700, Total=144502
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=1][rank=0/1] Train=2879, Val=50, Test=50, Total=2979
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=2][rank=0/1] Train=469, Val=50, Test=50, Total=569
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=3][rank=0/1] Train=1390, Val=50, Test=50, Total=1490
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=4][rank=0/1] Train=1014, Val=50, Test=50, Total=1114
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=5][rank=0/1] Train=2734, Val=50, Test=50, Total=2834
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=6][rank=0/1] Train=3251, Val=50, Test=50, Total=3351
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=7][rank=0/1] Train=4563, Val=50, Test=50, Total=4663
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=8][rank=0/1] Train=2393, Val=50, Test=50, Total=2493
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=9][rank=0/1] Train=271, Val=50, Test=50, Total=371
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=10][rank=0/1] Train=572, Val=50, Test=50, Total=672
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=11][rank=0/1] Train=621, Val=50, Test=50, Total=721
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=12][rank=0/1] Train=2985, Val=50, Test=50, Total=3085
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=13][rank=0/1] Train=18381, Val=50, Test=50, Total=18481
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=14][rank=0/1] Train=5697, Val=50, Test=50, Total=5797
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=15][rank=0/1] Train=3848, Val=50, Test=50, Total=3948
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=16][rank=0/1] Train=8175, Val=50, Test=50, Total=8275
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=17][rank=0/1] Train=2132, Val=50, Test=50, Total=2232
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=18][rank=0/1] Train=9675, Val=50, Test=50, Total=9775
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=19][rank=0/1] Train=3167, Val=50, Test=50, Total=3267
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=20][rank=0/1] Train=125, Val=50, Test=50, Total=225
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=21][rank=0/1] Train=9564, Val=50, Test=50, Total=9664
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=22][rank=0/1] Train=1754, Val=50, Test=50, Total=1854
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=23][rank=0/1] Train=808, Val=50, Test=50, Total=908
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=24][rank=0/1] Train=9537, Val=50, Test=50, Total=9637
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=25][rank=0/1] Train=5351, Val=50, Test=50, Total=5451
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=26][rank=0/1] Train=4252, Val=50, Test=50, Total=4352
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=27][rank=0/1] Train=6712, Val=50, Test=50, Total=6812
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=28][rank=0/1] Train=3717, Val=50, Test=50, Total=3817
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=29][rank=0/1] Train=8202, Val=50, Test=50, Total=8302
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=30][rank=0/1] Train=2806, Val=50, Test=50, Total=2906
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=31][rank=0/1] Train=181, Val=50, Test=50, Total=281
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=32][rank=0/1] Train=2670, Val=50, Test=50, Total=2770
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=33][rank=0/1] Train=3687, Val=50, Test=50, Total=3787
+2025-11-29 16:48:24 (federatedscope.core.data.base_translator:368) INFO: [Final Split Summary][loaded][client=34][rank=0/1] Train=7519, Val=50, Test=50, Total=7619
+2025-11-29 16:48:26 (federatedscope.core.auxiliaries.utils:175) INFO: The device information file is not provided
+2025-11-29 16:48:26 (federatedscope.core.auxiliaries.model_builder:139) WARNING: The input shape is None. Please specify the `data.input_shape`(a tuple) or give the representative data to `get_model` if necessary
+2025-11-29 16:48:30 (federatedscope.llm.misc.debug_utils:120) INFO: [DBG_EMB][tag=after-build][rank=?] tok_len=151643 | base=Qwen2ForCausalLM | in_emb=(Embedding) num=151646 ptr=139661415518272 | out_emb=(Linear) num=151646 ptr=139661415518272 | lora_ptr=None
+2025-11-29 16:48:33 (federatedscope.llm.model.model_builder:195) INFO: [Warmup-Init] loaded from checkpoints_u10_warmup_1.0/final_tldr_choice_qwen_fedbiscuit_u10_warmup_1.0_round_200.ckpt (round=200) | missing=291 unexpected=2352
