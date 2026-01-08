@@ -1,0 +1,1 @@
+{"Role": "Client #1", "Round": 19, "Results_raw": {"test_total": 500, "test_loss": 264.92486572265625, "test_avg_loss": 0.5298497314453126, "test_seen": 500, "test_correct": 451, "test_acc": 0.902, "val_total": 500, "val_loss": 167.0507049560547, "val_avg_loss": 0.33410140991210935, "val_seen": 500, "val_correct": 463, "val_acc": 0.926}}
